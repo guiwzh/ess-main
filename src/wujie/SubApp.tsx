@@ -3,7 +3,7 @@ import WujieReact from 'wujie-react'
 import { Spin, Result, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { getSubAppConfig } from './config'
-import { getSubAppProps } from './props'
+import { useSubAppProps } from './props'
 
 interface SubAppProps {
   /** 子应用名称，必须与 config 中注册的 name 一致 */
@@ -18,6 +18,7 @@ export default function SubApp({ name }: SubAppProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const config = getSubAppConfig(name)
+  const subAppProps = useSubAppProps()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -62,7 +63,7 @@ export default function SubApp({ name }: SubAppProps) {
         name={config.name}
         url={config.url}
         alive={config.alive}
-        props={getSubAppProps()}
+        props={subAppProps}
         loadError={handleLoadError}
         beforeLoad={() => handleLoading()}
       />

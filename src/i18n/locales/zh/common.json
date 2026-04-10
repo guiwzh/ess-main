@@ -22,5 +22,6 @@
   "serverError": "服务异常，请稍后重试",
   "noPermission": "没有权限执行此操作",
   "systemName": "储能运维管理平台",
-  "logout": "退出登录"
+  "logout": "退出登录",
+  "backHome": "返回首页"
 }

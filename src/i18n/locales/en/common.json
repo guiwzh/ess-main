@@ -22,5 +22,6 @@
   "serverError": "Server error, please try again later",
   "noPermission": "You do not have permission to perform this action",
   "systemName": "Energy Storage O&M Platform",
-  "logout": "Logout"
+  "logout": "Logout",
+  "backHome": "Back to Home"
 }

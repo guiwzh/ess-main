@@ -41,6 +41,9 @@ importers:
       react-router-dom:
         specifier: ^7.14.0
         version: 7.14.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      wujie-react:
+        specifier: ^1.0.29
+        version: 1.0.29(react@19.2.5)
       zustand:
         specifier: ^5.0.12
         version: 5.0.12(@types/react@19.2.14)(react@19.2.5)(use-sync-external-store@1.6.0(react@19.2.5))
@@ -3131,6 +3134,14 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+
+  wujie-react@1.0.29:
+    resolution: {integrity: sha512-6XKSpHwaRPKhmn6glkt4fKpVjnKWE2Lfd7hG/ACmmCsy+65aQCIrD91eJb/qL6hyPnpGQMiPCJeVhPFyDPpqzw==, tarball: http://jfrog.catlbattery.com/artifactory/api/npm/npm-group/_relative/repository/hzero-npm-group/wujie-react/-/wujie-react-1.0.29.tgz}
+    peerDependencies:
+      react: '>=16.0.0'
+
+  wujie@1.0.29:
+    resolution: {integrity: sha512-u7PmBT4l5ov7ciwmZNG8DLIRKrYrnXDa0LnAFgRQikJ/ZrVZYzzSNz6duzEJoj8/o46dnMy/g9Hh/PBYGbgFUw==, tarball: http://jfrog.catlbattery.com/artifactory/api/npm/npm-group/_relative/repository/hzero-npm-group/wujie/-/wujie-1.0.29.tgz}
 
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
@@ -6454,6 +6465,16 @@ snapshots:
   wrappy@1.0.2: {}
 
   ws@8.20.0: {}
+
+  wujie-react@1.0.29(react@19.2.5):
+    dependencies:
+      prop-types: 15.8.1
+      react: 19.2.5
+      wujie: 1.0.29
+
+  wujie@1.0.29:
+    dependencies:
+      '@babel/runtime': 7.29.2
 
   xtend@4.0.2: {}
 

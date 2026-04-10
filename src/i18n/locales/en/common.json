@@ -23,5 +23,11 @@
   "noPermission": "You do not have permission to perform this action",
   "systemName": "Energy Storage O&M Platform",
   "logout": "Logout",
-  "backHome": "Back to Home"
+  "backHome": "Back to Home",
+  "retry": "Retry",
+  "subAppLoading": "Loading sub-app...",
+  "subAppTimeout": "Sub-app {{name}} load timeout",
+  "subAppLoadError": "Sub-app {{name}} load failed",
+  "subAppNotFound": "Sub-app not found",
+  "subAppError": "Sub-app load error"
 }

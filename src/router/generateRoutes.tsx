@@ -11,8 +11,13 @@ const Forbidden = () => <div style={{ padding: 48, textAlign: 'center' }}>403 - 
 /** 将后端路由数据转换为 react-router RouteObject */
 export function generateRoutes(routes: RouteItem[]): RouteObject[] {
   return routes.map((route) => {
+    // 取路径最后一段作为相对路径，确保嵌套路由正确匹配
+    // /dashboard → dashboard, /operation/devices → devices
+    const segments = route.path.split('/').filter(Boolean)
+    const relativePath = segments[segments.length - 1] || route.path
+
     const routeObj: RouteObject = {
-      path: route.path.replace(/^\//, ''), // 去掉前导 /，变为相对路径
+      path: relativePath,
     }
 
     // 叶子节点：匹配组件
@@ -33,11 +38,14 @@ export function generateRoutes(routes: RouteItem[]): RouteObject[] {
     // 有子路由
     if (route.children?.length) {
       routeObj.children = generateRoutes(route.children)
-      // 父级路由默认重定向到第一个子路由
+      // 父级路由默认重定向到第一个子路由（使用相对路径）
       if (!route.component && route.children[0]) {
+        const firstChildSegments = route.children[0].path.split('/').filter(Boolean)
+        const firstChildRelative =
+          firstChildSegments[firstChildSegments.length - 1] || route.children[0].path
         routeObj.children.unshift({
           index: true,
-          element: <Navigate to={route.children[0].path} replace />,
+          element: <Navigate to={firstChildRelative} replace />,
         })
       }
     }

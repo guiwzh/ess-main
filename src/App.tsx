@@ -15,6 +15,10 @@ function App() {
       locale={localeMap[locale]}
       theme={{
         algorithm: theme === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
+        token: {
+          colorPrimary: '#00B96B',
+          borderRadius: 6,
+        },
       }}
     >
       <RouterProvider router={router} />

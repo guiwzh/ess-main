@@ -1,20 +1,16 @@
-import { Space, Dropdown, Switch, Select } from 'antd'
-import { GlobalOutlined, UserOutlined, BulbOutlined } from '@ant-design/icons'
+import { Space, Dropdown } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useAppStore } from '@/store/appStore'
 import { useUserStore } from '@/store/userStore'
+import ThemeSwitch from '@/components/ThemeSwitch'
+import LangSwitch from '@/components/LangSwitch'
+import StationPicker from '@/components/StationPicker'
 
 const RightContent: React.FC = () => {
-  const { i18n, t } = useTranslation('common')
+  const { t } = useTranslation('common')
   const navigate = useNavigate()
-  const { theme, toggleTheme, locale, setLocale } = useAppStore()
   const { userInfo, logout } = useUserStore()
-
-  const handleLocaleChange = (value: 'zh' | 'en') => {
-    setLocale(value)
-    i18n.changeLanguage(value)
-  }
 
   const handleLogout = () => {
     logout()
@@ -23,28 +19,10 @@ const RightContent: React.FC = () => {
 
   return (
     <Space size="middle">
-      {/* 主题切换 */}
-      <Switch
-        checkedChildren={<BulbOutlined />}
-        unCheckedChildren={<BulbOutlined />}
-        checked={theme === 'dark'}
-        onChange={toggleTheme}
-      />
+      <StationPicker />
+      <ThemeSwitch />
+      <LangSwitch />
 
-      {/* 语言切换 */}
-      <Select
-        value={locale}
-        onChange={handleLocaleChange}
-        variant="borderless"
-        suffixIcon={<GlobalOutlined />}
-        options={[
-          { value: 'zh', label: '中文' },
-          { value: 'en', label: 'English' },
-        ]}
-        style={{ width: 100 }}
-      />
-
-      {/* 用户信息下拉 */}
       <Dropdown
         menu={{
           items: [{ key: 'logout', label: t('logout'), danger: true }],

@@ -45,7 +45,7 @@ async function refreshToken(): Promise<string> {
 
 // ---------- 响应拦截器 ----------
 request.interceptors.response.use(
-  (response: AxiosResponse) => response.data,
+  (response: AxiosResponse) => response,
   async (error: AxiosError<{ message?: string }>) => {
     // 网络断开检测
     if (!navigator.onLine) {

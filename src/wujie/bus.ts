@@ -32,6 +32,7 @@ export function onTokenExpired(callback: () => void) {
 
 /** 监听子应用路由跳转事件 */
 export function onNavigate(callback: (path: string) => void) {
-  bus.$on(BUS_EVENTS.NAVIGATE, callback)
-  return () => bus.$off(BUS_EVENTS.NAVIGATE, callback)
+  const handler = (...args: unknown[]) => callback(args[0] as string)
+  bus.$on(BUS_EVENTS.NAVIGATE, handler)
+  return () => bus.$off(BUS_EVENTS.NAVIGATE, handler)
 }

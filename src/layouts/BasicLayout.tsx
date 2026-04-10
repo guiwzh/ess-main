@@ -16,7 +16,8 @@ function toProLayoutRoutes(
 ): { path: string; name: string; children?: ReturnType<typeof toProLayoutRoutes> }[] {
   return routes.map((r) => ({
     path: r.path,
-    name: t(r.name),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    name: (t as any)(r.name),
     ...(r.children?.length ? { children: toProLayoutRoutes(r.children, t) } : {}),
   }))
 }
@@ -33,7 +34,11 @@ const BasicLayout: React.FC = () => {
   // 主应用与子应用的 bus 事件同步
   useBusSync()
 
-  const menuRoutes = useMemo(() => toProLayoutRoutes(dynamicRoutes, tMenu), [dynamicRoutes, tMenu])
+  const menuRoutes = useMemo(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    () => toProLayoutRoutes(dynamicRoutes, tMenu as any),
+    [dynamicRoutes, tMenu],
+  )
 
   return (
     <ProLayout

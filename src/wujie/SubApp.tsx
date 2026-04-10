@@ -63,7 +63,7 @@ export default function SubApp({ name }: SubAppProps) {
         name={config.name}
         url={config.url}
         alive={config.alive}
-        props={subAppProps}
+        props={subAppProps as unknown as Record<string, unknown>}
         loadError={handleLoadError}
         beforeLoad={() => handleLoading()}
       />

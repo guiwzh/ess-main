@@ -44,13 +44,15 @@ export function useBusSync() {
     const unsubscribe = onTokenExpired(async () => {
       try {
         const res = await refreshTokenApi()
-        setAuth(res.data.accessToken, res.data.refreshToken)
+        setAuth(res.data.data.accessToken, res.data.data.refreshToken)
       } catch {
         logout()
         navigate('/login')
       }
     })
-    return unsubscribe
+    return () => {
+      unsubscribe()
+    }
   }, [navigate, setAuth, logout])
 
   // 监听子应用路由跳转
@@ -58,6 +60,8 @@ export function useBusSync() {
     const unsubscribe = onNavigate((path: string) => {
       navigate(path)
     })
-    return unsubscribe
+    return () => {
+      unsubscribe()
+    }
   }, [navigate])
 }

@@ -9,14 +9,15 @@ import { useBusSync } from '@/wujie/useBusSync'
 import type { RouteItem } from '@/store/userStore'
 import RightContent from './components/RightContent'
 
-/** 将后端路由数据转为 ProLayout route 格式 */
+/** 将后端路由数据转为 ProLayout route 格式，使用 i18n 翻译菜单名 */
 function toProLayoutRoutes(
   routes: RouteItem[],
+  t: (key: string) => string,
 ): { path: string; name: string; children?: ReturnType<typeof toProLayoutRoutes> }[] {
   return routes.map((r) => ({
     path: r.path,
-    name: r.meta?.title || r.name,
-    ...(r.children?.length ? { children: toProLayoutRoutes(r.children) } : {}),
+    name: t(r.name),
+    ...(r.children?.length ? { children: toProLayoutRoutes(r.children, t) } : {}),
   }))
 }
 
@@ -24,6 +25,7 @@ const BasicLayout: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { t } = useTranslation('common')
+  const { t: tMenu } = useTranslation('menu')
   const { sidebarCollapsed, setSidebarCollapsed } = useAppStore()
   const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
   const [pathname, setPathname] = useState(location.pathname)
@@ -31,7 +33,7 @@ const BasicLayout: React.FC = () => {
   // 主应用与子应用的 bus 事件同步
   useBusSync()
 
-  const menuRoutes = useMemo(() => toProLayoutRoutes(dynamicRoutes), [dynamicRoutes])
+  const menuRoutes = useMemo(() => toProLayoutRoutes(dynamicRoutes, tMenu), [dynamicRoutes, tMenu])
 
   return (
     <ProLayout

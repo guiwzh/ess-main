@@ -25,26 +25,26 @@ export default defineMock([
       data: [
         {
           path: '/dashboard',
-          name: 'Dashboard',
+          name: 'dashboard',
           icon: 'DashboardOutlined',
           component: 'pages/Dashboard',
           meta: { title: '仪表盘' },
         },
         {
           path: '/operation',
-          name: 'Operation',
+          name: 'operation',
           icon: 'ToolOutlined',
           meta: { title: '运维管理' },
           children: [
             {
               path: '/operation/devices',
-              name: 'Devices',
+              name: 'device',
               component: 'sub-operation',
               meta: { title: '设备管理' },
             },
             {
               path: '/operation/alarms',
-              name: 'Alarms',
+              name: 'alarm',
               component: 'sub-operation',
               meta: { title: '告警管理' },
             },
@@ -52,13 +52,13 @@ export default defineMock([
         },
         {
           path: '/analysis',
-          name: 'Analysis',
+          name: 'analysis',
           icon: 'BarChartOutlined',
           meta: { title: '数据分析' },
           children: [
             {
               path: '/analysis/reports',
-              name: 'Reports',
+              name: 'report',
               component: 'sub-analysis',
               meta: { title: '报表分析' },
             },

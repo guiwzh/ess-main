@@ -1,6 +1,7 @@
 {
   "dashboard": "Dashboard",
   "home": "Home",
+  "operation": "Operation",
   "system": "System",
   "systemUser": "Users",
   "systemRole": "Roles",

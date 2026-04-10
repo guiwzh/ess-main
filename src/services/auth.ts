@@ -35,3 +35,8 @@ export function getUserRoutes() {
 export function getUserStations() {
   return request.get<ApiResponse<import('@/store/userStore').Station[]>>('/user/stations')
 }
+
+/** 刷新 Token */
+export function refreshToken() {
+  return request.post<ApiResponse<LoginResult>>('/auth/refresh')
+}

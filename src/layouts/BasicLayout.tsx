@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useAppStore } from '@/store/appStore'
 import { useUserStore } from '@/store/userStore'
 import RouteProgress from '@/components/RouteProgress'
+import { useBusSync } from '@/wujie/useBusSync'
 import type { RouteItem } from '@/store/userStore'
 import RightContent from './components/RightContent'
 
@@ -26,6 +27,9 @@ const BasicLayout: React.FC = () => {
   const { sidebarCollapsed, setSidebarCollapsed } = useAppStore()
   const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
   const [pathname, setPathname] = useState(location.pathname)
+
+  // 主应用与子应用的 bus 事件同步
+  useBusSync()
 
   const menuRoutes = useMemo(() => toProLayoutRoutes(dynamicRoutes), [dynamicRoutes])
 

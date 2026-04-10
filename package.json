@@ -1,7 +1,9 @@
 {
-  "name": "ess-main",
-  "private": true,
-  "version": "0.0.0",
+  "name": "ess-main-template",
+  "version": "1.0.0",
+  "description": "React 19 微前端储能运维管理平台主应用模板",
+  "author": "guiwz",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",

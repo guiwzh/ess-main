@@ -20,5 +20,7 @@
   "noData": "暂无数据",
   "networkError": "网络已断开，请检查网络连接",
   "serverError": "服务异常，请稍后重试",
-  "noPermission": "没有权限执行此操作"
+  "noPermission": "没有权限执行此操作",
+  "systemName": "储能运维管理平台",
+  "logout": "退出登录"
 }

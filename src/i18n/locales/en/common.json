@@ -20,5 +20,7 @@
   "noData": "No data",
   "networkError": "Network disconnected, please check your connection",
   "serverError": "Server error, please try again later",
-  "noPermission": "You do not have permission to perform this action"
+  "noPermission": "You do not have permission to perform this action",
+  "systemName": "Energy Storage O&M Platform",
+  "logout": "Logout"
 }

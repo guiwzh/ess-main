@@ -1,0 +1,47 @@
+/* eslint-disable react-refresh/only-export-components */
+import { Suspense } from 'react'
+import { Navigate } from 'react-router-dom'
+import type { RouteObject } from 'react-router-dom'
+import type { RouteItem } from '@/store/userStore'
+import componentMap from './componentMap'
+
+/** 403 占位（后续步骤替换为真实 403 页面） */
+const Forbidden = () => <div style={{ padding: 48, textAlign: 'center' }}>403 - 无权访问</div>
+
+/** 将后端路由数据转换为 react-router RouteObject */
+export function generateRoutes(routes: RouteItem[]): RouteObject[] {
+  return routes.map((route) => {
+    const routeObj: RouteObject = {
+      path: route.path.replace(/^\//, ''), // 去掉前导 /，变为相对路径
+    }
+
+    // 叶子节点：匹配组件
+    if (route.component) {
+      const LazyComp = componentMap[route.component]
+      if (LazyComp) {
+        routeObj.element = (
+          <Suspense fallback={<div>Loading...</div>}>
+            <LazyComp />
+          </Suspense>
+        )
+      } else {
+        // 组件未注册，显示 403
+        routeObj.element = <Forbidden />
+      }
+    }
+
+    // 有子路由
+    if (route.children?.length) {
+      routeObj.children = generateRoutes(route.children)
+      // 父级路由默认重定向到第一个子路由
+      if (!route.component && route.children[0]) {
+        routeObj.children.unshift({
+          index: true,
+          element: <Navigate to={route.children[0].path} replace />,
+        })
+      }
+    }
+
+    return routeObj
+  })
+}

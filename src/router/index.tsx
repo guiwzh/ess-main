@@ -1,8 +1,7 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import BlankLayout from '@/layouts/BlankLayout'
-import BasicLayout from '@/layouts/BasicLayout'
-import AuthGuard from './AuthGuard'
 import LoginPage from '@/pages/Login'
+import AppEntry from './AppEntry'
 
 const router = createBrowserRouter([
   {
@@ -11,23 +10,8 @@ const router = createBrowserRouter([
     children: [{ index: true, element: <LoginPage /> }],
   },
   {
-    path: '/',
-    element: (
-      <AuthGuard>
-        <BasicLayout />
-      </AuthGuard>
-    ),
-    children: [
-      { index: true, element: <Navigate to="/dashboard" replace /> },
-      {
-        path: 'dashboard',
-        lazy: () => import('@/pages/Dashboard'),
-      },
-    ],
-  },
-  {
-    path: '*',
-    element: <Navigate to="/" replace />,
+    path: '/*',
+    element: <AppEntry />,
   },
 ])
 

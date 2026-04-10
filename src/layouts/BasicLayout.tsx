@@ -1,39 +1,32 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { ProLayout } from '@ant-design/pro-components'
 import { useTranslation } from 'react-i18next'
 import { useAppStore } from '@/store/appStore'
+import { useUserStore } from '@/store/userStore'
+import type { RouteItem } from '@/store/userStore'
 import RightContent from './components/RightContent'
 
-const defaultMenus = [
-  {
-    path: '/dashboard',
-    name: '仪表盘',
-    icon: 'DashboardOutlined',
-  },
-  {
-    path: '/operation',
-    name: '运维管理',
-    icon: 'ToolOutlined',
-    children: [
-      { path: '/operation/devices', name: '设备管理' },
-      { path: '/operation/alarms', name: '告警管理' },
-    ],
-  },
-  {
-    path: '/analysis',
-    name: '数据分析',
-    icon: 'BarChartOutlined',
-    children: [{ path: '/analysis/reports', name: '报表分析' }],
-  },
-]
+/** 将后端路由数据转为 ProLayout route 格式 */
+function toProLayoutRoutes(
+  routes: RouteItem[],
+): { path: string; name: string; children?: ReturnType<typeof toProLayoutRoutes> }[] {
+  return routes.map((r) => ({
+    path: r.path,
+    name: r.meta?.title || r.name,
+    ...(r.children?.length ? { children: toProLayoutRoutes(r.children) } : {}),
+  }))
+}
 
 const BasicLayout: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { t } = useTranslation('common')
   const { sidebarCollapsed, setSidebarCollapsed } = useAppStore()
+  const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
   const [pathname, setPathname] = useState(location.pathname)
+
+  const menuRoutes = useMemo(() => toProLayoutRoutes(dynamicRoutes), [dynamicRoutes])
 
   return (
     <ProLayout
@@ -45,7 +38,7 @@ const BasicLayout: React.FC = () => {
       location={{ pathname }}
       route={{
         path: '/',
-        children: defaultMenus,
+        children: menuRoutes,
       }}
       menuItemRender={(item, dom) => (
         <a

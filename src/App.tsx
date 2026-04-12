@@ -13,6 +13,7 @@ function App() {
   return (
     <ConfigProvider
       locale={localeMap[locale]}
+      form={{ colon: false }}
       theme={{
         algorithm: theme === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
         token: {

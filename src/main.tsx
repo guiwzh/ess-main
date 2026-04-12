@@ -5,9 +5,7 @@ import './styles/global.less'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
   <Suspense fallback={<div>Loading...</div>}>
     <App />
   </Suspense>,
-  // </StrictMode>,
 )

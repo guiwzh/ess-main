@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import WujieReact from 'wujie-react'
 import { Spin, Result, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { getSubAppConfig } from './config'
 import { useSubAppProps } from './props'
+import { emitRouteChange } from './bus'
 
 interface SubAppProps {
   /** 子应用名称，必须与 config 中注册的 name 一致 */
@@ -19,6 +21,7 @@ export default function SubApp({ name }: SubAppProps) {
   const [error, setError] = useState<string | null>(null)
   const config = getSubAppConfig(name)
   const subAppProps = useSubAppProps()
+  const location = useLocation()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,6 +31,17 @@ export default function SubApp({ name }: SubAppProps) {
 
     return () => clearTimeout(timer)
   }, [name, t])
+
+  // 主应用路由变化时，通知子应用导航到对应路径
+  useEffect(() => {
+    // 提取出子应用内部路径：去掉主应用前缀
+    // /operation/devices → /devices, /analysis/energy-stats → /energy-stats
+    const segments = location.pathname.split('/').filter(Boolean)
+    if (segments.length >= 2) {
+      const subPath = '/' + segments.slice(1).join('/')
+      emitRouteChange(subPath)
+    }
+  }, [location.pathname])
 
   if (!config) {
     return <Result status="error" title={t('subAppNotFound')} subTitle={`${name}`} />

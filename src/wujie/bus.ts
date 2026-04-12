@@ -24,6 +24,11 @@ export function emitTokenRefresh(token: string) {
   bus.$emit(BUS_EVENTS.TOKEN_REFRESH, token)
 }
 
+/** 向子应用广播路由变更 */
+export function emitRouteChange(path: string) {
+  bus.$emit(BUS_EVENTS.ROUTE_CHANGE, path)
+}
+
 /** 监听子应用 token-expired 事件 */
 export function onTokenExpired(callback: () => void) {
   bus.$on(BUS_EVENTS.TOKEN_EXPIRED, callback)

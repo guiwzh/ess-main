@@ -9,12 +9,18 @@ import componentMap from './componentMap'
 const Forbidden = () => <div style={{ padding: 48, textAlign: 'center' }}>403 - 无权访问</div>
 
 /** 将后端路由数据转换为 react-router RouteObject */
-export function generateRoutes(routes: RouteItem[]): RouteObject[] {
+export function generateRoutes(routes: RouteItem[], parentPath = ''): RouteObject[] {
   return routes.map((route) => {
-    // 取路径最后一段作为相对路径，确保嵌套路由正确匹配
-    // /dashboard → dashboard, /operation/devices → devices
-    const segments = route.path.split('/').filter(Boolean)
-    const relativePath = segments[segments.length - 1] || route.path
+    // 根据父路径计算相对路径
+    // /dashboard → dashboard
+    // /operation/devices → devices (parent=/operation)
+    // /operation/devices/category → devices/category (parent=/operation)
+    let relativePath: string
+    if (parentPath && route.path.startsWith(parentPath + '/')) {
+      relativePath = route.path.slice(parentPath.length + 1)
+    } else {
+      relativePath = route.path.replace(/^\//, '')
+    }
 
     const routeObj: RouteObject = {
       path: relativePath,
@@ -37,12 +43,15 @@ export function generateRoutes(routes: RouteItem[]): RouteObject[] {
 
     // 有子路由
     if (route.children?.length) {
-      routeObj.children = generateRoutes(route.children)
+      routeObj.children = generateRoutes(route.children, route.path)
       // 父级路由默认重定向到第一个子路由（使用相对路径）
       if (!route.component && route.children[0]) {
-        const firstChildSegments = route.children[0].path.split('/').filter(Boolean)
-        const firstChildRelative =
-          firstChildSegments[firstChildSegments.length - 1] || route.children[0].path
+        let firstChildRelative: string
+        if (route.children[0].path.startsWith(route.path + '/')) {
+          firstChildRelative = route.children[0].path.slice(route.path.length + 1)
+        } else {
+          firstChildRelative = route.children[0].path.replace(/^\//, '')
+        }
         routeObj.children.unshift({
           index: true,
           element: <Navigate to={firstChildRelative} replace />,

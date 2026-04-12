@@ -43,7 +43,7 @@ export default defineMock([
               meta: { title: '设备管理' },
             },
             {
-              path: '/operation/devices-category',
+              path: '/operation/devices/category',
               name: 'deviceCategory',
               component: 'sub-operation',
               meta: { title: '设备分类' },
@@ -55,13 +55,13 @@ export default defineMock([
               meta: { title: '实时告警' },
             },
             {
-              path: '/operation/alarms-history',
+              path: '/operation/alarms/history',
               name: 'alarmHistory',
               component: 'sub-operation',
               meta: { title: '历史告警' },
             },
             {
-              path: '/operation/alarms-rules',
+              path: '/operation/alarms/rules',
               name: 'alarmRules',
               component: 'sub-operation',
               meta: { title: '告警规则' },
@@ -73,13 +73,13 @@ export default defineMock([
               meta: { title: '运维工单' },
             },
             {
-              path: '/operation/work-orders-create',
+              path: '/operation/work-orders/create',
               name: 'workOrderCreate',
               component: 'sub-operation',
               meta: { title: '创建工单', hideInMenu: true },
             },
             {
-              path: '/operation/inspection',
+              path: '/operation/work-orders/inspection',
               name: 'inspection',
               component: 'sub-operation',
               meta: { title: '巡检计划' },
@@ -123,7 +123,7 @@ export default defineMock([
               meta: { title: '日报月报' },
             },
             {
-              path: '/analysis/report-custom',
+              path: '/analysis/report/custom',
               name: 'reportCustom',
               component: 'sub-analysis',
               meta: { title: '自定义报表' },

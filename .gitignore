@@ -12,13 +12,6 @@ dist
 dist-ssr
 *.local
 
-# Environment files
-.env.development
-.env.staging
-.env.production
-
-# npm auth
-.npmrc
 
 # Editor directories and files
 .vscode/*

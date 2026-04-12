@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import WujieReact from 'wujie-react'
 import { Spin, Result, Button } from 'antd'
@@ -15,22 +15,30 @@ interface SubAppProps {
 /** 子应用加载超时时间 (ms) */
 const LOAD_TIMEOUT = 15000
 
+/** 已成功加载过的子应用（alive 模式下不再重复 loading） */
+const loadedApps = new Set<string>()
+
 export default function SubApp({ name }: SubAppProps) {
   const { t } = useTranslation('common')
-  const [loading, setLoading] = useState(true)
+  const alreadyLoaded = loadedApps.has(name)
+  const [loading, setLoading] = useState(!alreadyLoaded)
   const [error, setError] = useState<string | null>(null)
   const config = getSubAppConfig(name)
   const subAppProps = useSubAppProps()
   const location = useLocation()
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (alreadyLoaded) return
+    timerRef.current = setTimeout(() => {
       setLoading(false)
       setError(t('subAppTimeout', { name }))
     }, LOAD_TIMEOUT)
 
-    return () => clearTimeout(timer)
-  }, [name, t])
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [name, t, alreadyLoaded])
 
   // 主应用路由变化时，通知子应用导航到对应路径
   useEffect(() => {
@@ -48,11 +56,20 @@ export default function SubApp({ name }: SubAppProps) {
   }
 
   const handleLoadError = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
     setLoading(false)
     setError(t('subAppLoadError', { name }))
   }
 
   const handleLoading = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+    loadedApps.add(name)
     setLoading(false)
   }
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import WujieReact from 'wujie-react'
 import { Spin, Result, Button } from 'antd'
@@ -40,16 +40,16 @@ export default function SubApp({ name }: SubAppProps) {
     }
   }, [name, t, alreadyLoaded])
 
+  // 提取子应用内部路径
+  const subPath = useMemo(() => {
+    const segments = location.pathname.split('/').filter(Boolean)
+    return segments.length >= 2 ? '/' + segments.slice(1).join('/') : '/dashboard'
+  }, [location.pathname])
+
   // 主应用路由变化时，通知子应用导航到对应路径
   useEffect(() => {
-    // 提取出子应用内部路径：去掉主应用前缀
-    // /operation/devices → /devices, /analysis/energy-stats → /energy-stats
-    const segments = location.pathname.split('/').filter(Boolean)
-    if (segments.length >= 2) {
-      const subPath = '/' + segments.slice(1).join('/')
-      emitRouteChange(subPath)
-    }
-  }, [location.pathname])
+    emitRouteChange(subPath)
+  }, [subPath])
 
   if (!config) {
     return <Result status="error" title={t('subAppNotFound')} subTitle={`${name}`} />
@@ -94,7 +94,7 @@ export default function SubApp({ name }: SubAppProps) {
         name={config.name}
         url={config.url}
         alive={config.alive}
-        props={subAppProps as unknown as Record<string, unknown>}
+        props={{ ...subAppProps, initialPath: subPath } as unknown as Record<string, unknown>}
         loadError={handleLoadError}
         beforeLoad={() => handleLoading()}
       />

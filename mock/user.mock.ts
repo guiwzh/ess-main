@@ -54,12 +54,6 @@ export default defineMock([
               component: 'sub-operation',
               meta: { title: '工单管理' },
             },
-            {
-              path: '/operation/work-orders/create',
-              name: 'workOrderCreate',
-              component: 'sub-operation',
-              meta: { title: '创建工单', hideInMenu: true },
-            },
           ],
         },
         {

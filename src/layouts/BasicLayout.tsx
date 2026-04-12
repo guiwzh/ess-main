@@ -63,6 +63,7 @@ const BasicLayout: React.FC = () => {
         </a>
       )}
       actionsRender={() => [<RightContent key="right" />]}
+      contentStyle={{ padding: 0 }}
     >
       <RouteProgress />
       <Outlet />

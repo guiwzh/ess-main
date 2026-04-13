@@ -12,7 +12,7 @@ interface SubAppProps {
 }
 
 /** 子应用加载超时时间 (ms) */
-const LOAD_TIMEOUT = 15000
+const LOAD_TIMEOUT = 5000
 
 export default function SubApp({ name }: SubAppProps) {
   const { t } = useTranslation('common')
@@ -21,10 +21,14 @@ export default function SubApp({ name }: SubAppProps) {
   const subAppProps = useSubAppProps()
   const location = useLocation()
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const mountedRef = useRef(false)
 
   useEffect(() => {
+    mountedRef.current = false
     timerRef.current = setTimeout(() => {
-      setError(t('subAppTimeout', { name }))
+      if (!mountedRef.current) {
+        setError(t('subAppTimeout', { name }))
+      }
     }, LOAD_TIMEOUT)
 
     return () => {
@@ -45,6 +49,7 @@ export default function SubApp({ name }: SubAppProps) {
   }
 
   const clearTimer = () => {
+    mountedRef.current = true
     if (timerRef.current) {
       clearTimeout(timerRef.current)
       timerRef.current = null

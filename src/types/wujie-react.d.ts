@@ -15,6 +15,8 @@ declare module 'wujie-react' {
     afterMount?: () => void
     beforeUnmount?: () => void
     afterUnmount?: () => void
+    activated?: () => void
+    deactivated?: () => void
     loadError?: (url: string, e: Error) => void
     width?: string
     height?: string

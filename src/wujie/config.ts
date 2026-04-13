@@ -18,12 +18,12 @@ export const subAppConfigs: SubAppConfig[] = [
   {
     name: 'sub-operation',
     url: SUB_APP_URLS.OPERATION,
-    alive: true,
+    alive: false,
   },
   {
     name: 'sub-analysis',
     url: SUB_APP_URLS.ANALYSIS,
-    alive: true,
+    alive: false,
   },
 ]
 

@@ -12,6 +12,4 @@ export const BUS_EVENTS = {
   TOKEN_EXPIRED: 'token-expired',
   /** 路由跳转（子应用通知主应用） */
   NAVIGATE: 'navigate',
-  /** 路由变更（主应用通知子应用） */
-  ROUTE_CHANGE: 'route-change',
 } as const

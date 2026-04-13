@@ -4,7 +4,6 @@ import { ProLayout } from '@ant-design/pro-components'
 import { useTranslation } from 'react-i18next'
 import { useAppStore } from '@/store/appStore'
 import { useUserStore } from '@/store/userStore'
-import RouteProgress from '@/components/RouteProgress'
 import { useBusSync } from '@/wujie/useBusSync'
 import type { RouteItem } from '@/store/userStore'
 import RightContent from './components/RightContent'
@@ -63,7 +62,6 @@ const BasicLayout: React.FC = () => {
       actionsRender={() => [<RightContent key="right" />]}
       contentStyle={{ padding: 18 }}
     >
-      <RouteProgress />
       <Outlet />
     </ProLayout>
   )

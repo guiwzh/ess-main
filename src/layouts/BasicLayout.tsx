@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { ProLayout } from '@ant-design/pro-components'
 import { useTranslation } from 'react-i18next'
@@ -29,7 +29,6 @@ const BasicLayout: React.FC = () => {
   const { t: tMenu } = useTranslation('menu')
   const { sidebarCollapsed, setSidebarCollapsed } = useAppStore()
   const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
-  const [pathname, setPathname] = useState(location.pathname)
 
   // 主应用与子应用的 bus 事件同步
   useBusSync()
@@ -47,7 +46,7 @@ const BasicLayout: React.FC = () => {
       layout="mix"
       collapsed={sidebarCollapsed}
       onCollapse={setSidebarCollapsed}
-      location={{ pathname }}
+      location={{ pathname: location.pathname }}
       route={{
         path: '/',
         children: menuRoutes,
@@ -55,7 +54,6 @@ const BasicLayout: React.FC = () => {
       menuItemRender={(item, dom) => (
         <a
           onClick={() => {
-            setPathname(item.path || '/')
             navigate(item.path || '/')
           }}
         >

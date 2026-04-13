@@ -18,13 +18,21 @@ export default function SubApp({ name }: SubAppProps) {
   const subAppProps = useSubAppProps()
   const location = useLocation()
 
+  // 计算子应用在主应用中的路由前缀，如 /operation
+  const basePath = useMemo(() => {
+    const segments = location.pathname.split('/').filter(Boolean)
+    return segments[0] ? '/' + segments[0] : '/'
+  }, [location.pathname])
+
   // 将子应用内部路径拼到 URL 上，单例模式下改变 url 即可同步路由
   const subUrl = useMemo(() => {
     if (!config) return ''
     const segments = location.pathname.split('/').filter(Boolean)
     const subPath = segments.length >= 2 ? '/' + segments.slice(1).join('/') : '/'
-    return config.url + subPath
-  }, [config, location.pathname])
+    return config.url + subPath + location.search
+  }, [config, location.pathname, location.search])
+
+  const mergedProps = useMemo(() => ({ ...subAppProps, basePath }), [subAppProps, basePath])
 
   if (!config) {
     return <Result status="error" title={t('subAppNotFound')} subTitle={`${name}`} />
@@ -50,7 +58,7 @@ export default function SubApp({ name }: SubAppProps) {
       name={config.name}
       url={subUrl}
       alive={config.alive}
-      props={subAppProps as unknown as Record<string, unknown>}
+      props={mergedProps as unknown as Record<string, unknown>}
       loadError={() => setError(t('subAppLoadError', { name }))}
     />
   )

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import WujieReact from 'wujie-react'
-import { Spin, Result, Button } from 'antd'
+import { Result, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { getSubAppConfig } from './config'
 import { useSubAppProps } from './props'
@@ -16,7 +16,6 @@ const LOAD_TIMEOUT = 15000
 
 export default function SubApp({ name }: SubAppProps) {
   const { t } = useTranslation('common')
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const config = getSubAppConfig(name)
   const subAppProps = useSubAppProps()
@@ -25,7 +24,6 @@ export default function SubApp({ name }: SubAppProps) {
 
   useEffect(() => {
     timerRef.current = setTimeout(() => {
-      setLoading(false)
       setError(t('subAppTimeout', { name }))
     }, LOAD_TIMEOUT)
 
@@ -46,21 +44,11 @@ export default function SubApp({ name }: SubAppProps) {
     return <Result status="error" title={t('subAppNotFound')} subTitle={`${name}`} />
   }
 
-  const handleLoadError = () => {
+  const clearTimer = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current)
       timerRef.current = null
     }
-    setLoading(false)
-    setError(t('subAppLoadError', { name }))
-  }
-
-  const handleLoading = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current)
-      timerRef.current = null
-    }
-    setLoading(false)
   }
 
   if (error) {
@@ -79,15 +67,16 @@ export default function SubApp({ name }: SubAppProps) {
   }
 
   return (
-    <Spin spinning={loading} tip={t('subAppLoading')} style={{ minHeight: 300 }}>
-      <WujieReact
-        name={config.name}
-        url={subUrl}
-        alive={config.alive}
-        props={subAppProps as unknown as Record<string, unknown>}
-        loadError={handleLoadError}
-        afterMount={() => handleLoading()}
-      />
-    </Spin>
+    <WujieReact
+      name={config.name}
+      url={subUrl}
+      alive={config.alive}
+      props={subAppProps as unknown as Record<string, unknown>}
+      loadError={() => {
+        clearTimer()
+        setError(t('subAppLoadError', { name }))
+      }}
+      afterMount={clearTimer}
+    />
   )
 }

@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useUserStore } from '@/store/userStore'
 import { useAppStore } from '@/store/appStore'
 
@@ -9,21 +10,8 @@ export interface SubAppPropsData {
   theme: string
   locale: string
   currentStation: string | null
-}
-
-/** 获取传递给子应用的 props（非响应式，用于一次性读取） */
-export function getSubAppProps(): SubAppPropsData {
-  const userState = useUserStore.getState()
-  const appState = useAppStore.getState()
-
-  return {
-    token: userState.token,
-    userInfo: userState.userInfo,
-    permissions: userState.permissions,
-    theme: appState.theme,
-    locale: appState.locale,
-    currentStation: appState.currentStation,
-  }
+  basePath: string
+  navigate: (path: string) => void
 }
 
 /** 响应式 hook：store 变更时自动返回最新 props，驱动 SubApp 重新传递 props 给子应用 */
@@ -35,8 +23,18 @@ export function useSubAppProps(): SubAppPropsData {
   const locale = useAppStore((s) => s.locale)
   const currentStation = useAppStore((s) => s.currentStation)
 
+  const location = useLocation()
+  const nav = useNavigate()
+
+  const basePath = useMemo(() => {
+    const segments = location.pathname.split('/').filter(Boolean)
+    return segments[0] ? '/' + segments[0] : '/'
+  }, [location.pathname])
+
+  const navigate = useCallback((path: string) => nav(path), [nav])
+
   return useMemo(
-    () => ({ token, userInfo, permissions, theme, locale, currentStation }),
-    [token, userInfo, permissions, theme, locale, currentStation],
+    () => ({ token, userInfo, permissions, theme, locale, currentStation, basePath, navigate }),
+    [token, userInfo, permissions, theme, locale, currentStation, basePath, navigate],
   )
 }

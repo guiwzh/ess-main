@@ -2,13 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/appStore'
 import { useUserStore } from '@/store/userStore'
-import {
-  emitLocaleChange,
-  emitThemeChange,
-  emitStationChange,
-  onTokenExpired,
-  onNavigate,
-} from './bus'
+import { emitLocaleChange, emitThemeChange, emitStationChange, onTokenExpired } from './bus'
 import { refreshToken as refreshTokenApi } from '@/services/auth'
 
 /**
@@ -54,14 +48,4 @@ export function useBusSync() {
       unsubscribe()
     }
   }, [navigate, setAuth, logout])
-
-  // 监听子应用路由跳转
-  useEffect(() => {
-    const unsubscribe = onNavigate((path: string) => {
-      navigate(path)
-    })
-    return () => {
-      unsubscribe()
-    }
-  }, [navigate])
 }

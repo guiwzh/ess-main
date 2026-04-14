@@ -1,22 +1,37 @@
-import { useMemo } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { ProLayout } from '@ant-design/pro-components'
 import { useTranslation } from 'react-i18next'
+import * as AntdIcons from '@ant-design/icons'
 import { useAppStore } from '@/store/appStore'
 import { useUserStore } from '@/store/userStore'
 import { useBusSync } from '@/wujie/useBusSync'
 import type { RouteItem } from '@/store/userStore'
 import RightContent from './components/RightContent'
 
+/** 根据 icon 字符串动态解析 antd Icon 组件 */
+function resolveIcon(iconName?: string): ReactNode | undefined {
+  if (!iconName) return undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const IconComp = (AntdIcons as any)[iconName]
+  return IconComp ? <IconComp /> : undefined
+}
+
 /** 将后端路由数据转为 ProLayout route 格式，使用 i18n 翻译菜单名 */
 function toProLayoutRoutes(
   routes: RouteItem[],
   t: (key: string) => string,
-): { path: string; name: string; children?: ReturnType<typeof toProLayoutRoutes> }[] {
+): {
+  path: string
+  name: string
+  icon?: ReactNode
+  children?: ReturnType<typeof toProLayoutRoutes>
+}[] {
   return routes.map((r) => ({
     path: r.path,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     name: (t as any)(r.name),
+    ...(r.icon ? { icon: resolveIcon(r.icon) } : {}),
     ...(r.children?.length ? { children: toProLayoutRoutes(r.children, t) } : {}),
   }))
 }

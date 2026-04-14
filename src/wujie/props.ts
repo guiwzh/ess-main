@@ -11,7 +11,7 @@ export interface SubAppPropsData {
   locale: string
   currentStation: string | null
   basePath: string
-  navigate: (path: string) => void
+  navigate: (path: string, options?: { state?: Record<string, unknown> }) => void
 }
 
 /** 响应式 hook：store 变更时自动返回最新 props，驱动 SubApp 重新传递 props 给子应用 */
@@ -31,7 +31,10 @@ export function useSubAppProps(): SubAppPropsData {
     return segments[0] ? '/' + segments[0] : '/'
   }, [location.pathname])
 
-  const navigate = useCallback((path: string) => nav(path), [nav])
+  const navigate = useCallback(
+    (path: string, options?: { state?: Record<string, unknown> }) => nav(path, options),
+    [nav],
+  )
 
   return useMemo(
     () => ({ token, userInfo, permissions, theme, locale, currentStation, basePath, navigate }),

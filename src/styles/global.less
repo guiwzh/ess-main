@@ -38,3 +38,17 @@ body {
 ::selection {
   background: fade(@color-primary, 20%);
 }
+
+// 修复 ProLayout header actions hover 遮罩超出布局高度
+.ant-pro-global-header-header-actions-item {
+  height: 100%;
+  max-height: 56px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+// 去除 ProLayout header actions hover 遮罩
+.ant-pro-global-header-header-actions-item > *:hover {
+  background: transparent;
+}

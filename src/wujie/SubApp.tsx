@@ -18,12 +18,10 @@ export default function SubApp({ name }: SubAppProps) {
   const subAppProps = useSubAppProps()
   const location = useLocation()
 
-  // 将子应用内部路径拼到 URL 上，单例模式下改变 url 即可同步路由
+  // 将完整路径拼到子应用 URL 上，子应用通过 basename 识别前缀
   const subUrl = useMemo(() => {
     if (!config) return ''
-    const segments = location.pathname.split('/').filter(Boolean)
-    const subPath = segments.length >= 2 ? '/' + segments.slice(1).join('/') : '/'
-    return config.url + subPath + location.search
+    return config.url + location.pathname + location.search
   }, [config, location.pathname, location.search])
 
   if (!config) {

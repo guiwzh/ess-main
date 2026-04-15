@@ -5,17 +5,13 @@ import path from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), mockDevServerPlugin()], //mockDevServerPlugin({ enabled: false })
+  plugins: [react(), mockDevServerPlugin({ prefix: '^/api' })], //mockDevServerPlugin({ enabled: false })
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
   },
-  server: {
-    proxy: {
-      '^/api': { target: 'http://localhost:8080' },
-    },
-  },
+  server: {},
   css: {
     preprocessorOptions: {
       less: {

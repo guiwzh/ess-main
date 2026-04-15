@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { ProLayout } from '@ant-design/pro-components'
 import { useTranslation } from 'react-i18next'
@@ -43,6 +43,7 @@ const BasicLayout: React.FC = () => {
   const { t: tMenu } = useTranslation('menu')
   const { sidebarCollapsed, setSidebarCollapsed } = useAppStore()
   const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
+  const [openKeys, setOpenKeys] = useState<string[]>([])
 
   // 主应用与子应用的 bus 事件同步
   useBusSync()
@@ -74,6 +75,7 @@ const BasicLayout: React.FC = () => {
           {dom}
         </a>
       )}
+      menuProps={{ inlineCollapsed: sidebarCollapsed, openKeys, onOpenChange: setOpenKeys }}
       actionsRender={() => [<RightContent key="right" />]}
       contentStyle={{ padding: 18 }}
     >

@@ -5,8 +5,6 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import prettierPlugin from 'eslint-plugin-prettier'
 import prettierConfig from 'eslint-config-prettier'
-import unusedImports from 'eslint-plugin-unused-imports'
-
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig(
@@ -26,16 +24,13 @@ export default defineConfig(
     },
     plugins: {
       prettier: prettierPlugin,
-      'unused-imports': unusedImports,
     },
     rules: {
       'prettier/prettier': 'error',
       'react-hooks/set-state-in-effect': 'warn',
-      '@typescript-eslint/no-unused-vars': 'off',
-      'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
+      '@typescript-eslint/no-unused-vars': [
         'warn',
-        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
     },
   },

@@ -1,9 +1,7 @@
-import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/appStore'
-import { useUserStore } from '@/store/userStore'
-import { emitLocaleChange, emitThemeChange, emitStationChange, onTokenExpired } from './bus'
-import { refreshToken as refreshTokenApi } from '@/services/auth'
+import { getNewToken } from '@/utils/request'
+import { useEffect, useRef } from 'react'
+import { emitLocaleChange, emitStationChange, emitThemeChange, onTokenExpired } from './bus'
 
 /**
  * 主应用 bus 同步 hook
@@ -11,12 +9,9 @@ import { refreshToken as refreshTokenApi } from '@/services/auth'
  * - 监听子应用 bus 事件 → 响应处理
  */
 export function useBusSync() {
-  const navigate = useNavigate()
   const theme = useAppStore((s) => s.theme)
   const locale = useAppStore((s) => s.locale)
   const currentStation = useAppStore((s) => s.currentStation)
-  const setAuth = useUserStore((s) => s.setAuth)
-  const logout = useUserStore((s) => s.logout)
   /**
    * 跳过首次渲染的 bus emit。
    * 原因：主应用 mount 时子应用尚未加载完成，bus 事件无人订阅会触发 wujie warn。
@@ -50,19 +45,17 @@ export function useBusSync() {
     mountedRef.current = true
   }, [])
 
-  // 监听子应用 token-expired → 刷新 token 或登出
+  // 监听子应用 token-expired → 复用统一刷新逻辑（getNewToken 内部处理 zustand + bus + 失败跳转）
   useEffect(() => {
     const unsubscribe = onTokenExpired(async () => {
       try {
-        const res = await refreshTokenApi()
-        setAuth(res.data.data.accessToken, res.data.data.refreshToken)
+        await getNewToken()
       } catch {
-        logout()
-        navigate('/login')
+        // getNewToken 内部已处理登出 + 跳转 /login
       }
     })
     return () => {
       unsubscribe()
     }
-  }, [navigate, setAuth, logout])
+  }, [])
 }

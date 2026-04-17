@@ -1,7 +1,9 @@
-import axios, { type AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
-import { message } from 'antd'
 import { API_BASE_URL, TOKEN_CONFIG } from '@/constants'
-import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '@/utils/auth'
+import { useUserStore } from '@/store/userStore'
+import { getAccessToken, getRefreshToken, setTokens } from '@/utils/auth'
+import { emitTokenRefresh } from '@/wujie/bus'
+import { message } from 'antd'
+import axios, { type AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
 
 const request = axios.create({
   baseURL: API_BASE_URL,
@@ -23,24 +25,53 @@ request.interceptors.request.use(
   (error: AxiosError) => Promise.reject(error),
 )
 
-// ---------- Token 刷新锁 ----------
+// ---------- Token 统一刷新（带锁） ----------
 let isRefreshing = false
 let pendingRequests: Array<(token: string) => void> = []
 
-function onTokenRefreshed(newToken: string) {
-  pendingRequests.forEach((cb) => cb(newToken))
-  pendingRequests = []
-}
+/**
+ * 统一 Token 刷新入口（供拦截器 + useBusSync 复用）。
+ * - 带锁：并发请求只触发一次刷新，其余排队等待
+ * - 刷新成功后：同步 localStorage + zustand store + 广播给子应用
+ * - 刷新失败后：清除凭证 + 跳转登录
+ */
+export function getNewToken(): Promise<string> {
+  if (isRefreshing) {
+    return new Promise((resolve) => {
+      pendingRequests.push(resolve)
+    })
+  }
 
-async function refreshToken(): Promise<string> {
+  isRefreshing = true
+
   const refresh = getRefreshToken()
-  const res = await axios.post<{ data: { token: string; refreshToken: string } }>(
-    `${API_BASE_URL}/auth/refresh`,
-    { refreshToken: refresh },
-  )
-  const { token, refreshToken: newRefresh } = res.data.data
-  setTokens(token, newRefresh)
-  return token
+  return axios
+    .post<{ data: { token: string; refreshToken: string } }>(`${API_BASE_URL}/auth/refresh`, {
+      refreshToken: refresh,
+    })
+    .then((res) => {
+      const { token, refreshToken: newRefresh } = res.data.data
+
+      // 同步 localStorage
+      setTokens(token, newRefresh)
+      // 同步 zustand store（驱动 useSubAppProps 更新 wujie props）
+      useUserStore.getState().setAuth(token, newRefresh)
+      // 广播给已加载的子应用，让子应用 store 立即更新
+      emitTokenRefresh(token)
+
+      isRefreshing = false
+      pendingRequests.forEach((cb) => cb(token))
+      pendingRequests = []
+
+      return token
+    })
+    .catch((err) => {
+      isRefreshing = false
+      pendingRequests = []
+      useUserStore.getState().logout()
+      window.location.href = '/login'
+      throw err
+    })
 }
 
 // ---------- 响应拦截器 ----------
@@ -56,31 +87,14 @@ request.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
     const status = error.response?.status
 
-    // 401: 自动刷新 token + 重放
+    // 401: 刷新 token + 重放原始请求
     if (status === 401 && !originalRequest._retry) {
-      if (isRefreshing) {
-        return new Promise((resolve) => {
-          pendingRequests.push((newToken: string) => {
-            originalRequest.headers.Authorization = `Bearer ${newToken}`
-            resolve(request(originalRequest))
-          })
-        })
-      }
-
       originalRequest._retry = true
-      isRefreshing = true
-
       try {
-        const newToken = await refreshToken()
-        isRefreshing = false
-        onTokenRefreshed(newToken)
+        const newToken = await getNewToken()
         originalRequest.headers.Authorization = `Bearer ${newToken}`
         return request(originalRequest)
       } catch {
-        isRefreshing = false
-        pendingRequests = []
-        clearTokens()
-        window.location.href = '/login'
         return Promise.reject(error)
       }
     }
@@ -99,7 +113,7 @@ request.interceptors.response.use(
   },
 )
 
-// ---------- 带重试的请求方法（用于关键接口） ----------
+// ---------- 带重试的请求方法（仅对网络错误/5xx 重试，4xx 不重试） ----------
 export async function requestWithRetry<T>(
   config: Parameters<typeof request>[0],
   retries = TOKEN_CONFIG.MAX_RETRY,
@@ -108,6 +122,9 @@ export async function requestWithRetry<T>(
     try {
       return await request(config)
     } catch (err) {
+      const status = (err as AxiosError)?.response?.status
+      // 4xx 客户端错误不重试（401 已由拦截器处理）
+      if (status && status >= 400 && status < 500) throw err
       if (i === retries) throw err
       await new Promise((r) => setTimeout(r, TOKEN_CONFIG.RETRY_DELAY * 2 ** i))
     }

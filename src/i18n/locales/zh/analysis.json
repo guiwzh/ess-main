@@ -54,12 +54,12 @@
   "report.revenueWan": "收益 (万元)",
   "report.exportPdf": "导出 PDF",
   "report.exportExcel": "导出 Excel",
-  "report.exportMock": "导出 {format} 触发（Mock）",
+  "report.exportMock": "导出功能开发中",
   "report.selectIndicators": "选择指标：",
   "report.timeRange": "时间范围：",
   "report.preview": "预览",
   "report.export": "导出",
-  "report.exportCustomMock": "自定义报表导出触发（Mock）",
+  "report.exportCustomMock": "导出功能开发中",
   "report.trendChart": "趋势图表",
   "report.dataTable": "数据表格",
   "report.time": "时间",
@@ -67,5 +67,8 @@
   "tab.energyStats": "充放电统计",
   "tab.efficiency": "能量效率",
   "tab.revenue": "收益分析",
-  "tab.batteryHealth": "电池健康度"
+  "tab.batteryHealth": "电池健康度",
+
+  "fetchFailed": "数据加载失败",
+  "exportTodo": "导出功能开发中"
 }

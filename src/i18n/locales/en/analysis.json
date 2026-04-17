@@ -54,12 +54,12 @@
   "report.revenueWan": "Revenue (10k CNY)",
   "report.exportPdf": "Export PDF",
   "report.exportExcel": "Export Excel",
-  "report.exportMock": "Export {format} triggered (Mock)",
+  "report.exportMock": "Export feature coming soon",
   "report.selectIndicators": "Select Indicators:",
   "report.timeRange": "Time Range:",
   "report.preview": "Preview",
   "report.export": "Export",
-  "report.exportCustomMock": "Custom report export triggered (Mock)",
+  "report.exportCustomMock": "Export feature coming soon",
   "report.trendChart": "Trend Chart",
   "report.dataTable": "Data Table",
   "report.time": "Time",
@@ -67,5 +67,8 @@
   "tab.energyStats": "Charge/Discharge",
   "tab.efficiency": "Energy Efficiency",
   "tab.revenue": "Revenue Analysis",
-  "tab.batteryHealth": "Battery Health"
+  "tab.batteryHealth": "Battery Health",
+
+  "fetchFailed": "Failed to load data",
+  "exportTodo": "Export feature coming soon"
 }

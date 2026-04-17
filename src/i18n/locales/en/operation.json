@@ -138,7 +138,7 @@
   "workorder.submitRemark": "Submit Remark",
   "workorder.remarkSubmitted": "Remark submitted",
   "workorder.upload": "Upload File",
-  "workorder.uploadMock": "File upload (Mock)",
+  "workorder.uploadMock": "File upload coming soon",
   "workorder.step.selectType": "Select Type",
   "workorder.step.fillInfo": "Fill Info",
   "workorder.step.bindDevice": "Link Device",
@@ -169,5 +169,12 @@
   "inspection.enabled": "Enabled",
   "inspection.deleteSuccess": "Deleted",
   "inspection.updateSuccess": "Updated",
-  "inspection.createSuccess": "Created"
+  "inspection.createSuccess": "Created",
+
+  "fetchFailed": "Failed to load data",
+  "exportTodo": "Export feature coming soon",
+  "alarm.confirmSuccess": "Alarm confirmed",
+  "alarm.clearSuccess": "Alarm cleared",
+  "alarm.operationFailed": "Operation failed",
+  "workorder.remarkTodo": "Remark feature coming soon"
 }

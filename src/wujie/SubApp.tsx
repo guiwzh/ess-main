@@ -1,8 +1,8 @@
+import { Button, Result } from 'antd'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import WujieReact from 'wujie-react'
-import { Result, Button } from 'antd'
-import { useTranslation } from 'react-i18next'
 import { getSubAppConfig } from './config'
 import { useSubAppProps } from './props'
 
@@ -11,7 +11,7 @@ interface SubAppProps {
   name: string
 }
 
-export default function SubApp({ name }: SubAppProps) {
+const SubApp = ({ name }: SubAppProps) => {
   const { t } = useTranslation('common')
   const [error, setError] = useState<string | null>(null)
   const config = getSubAppConfig(name)
@@ -53,3 +53,5 @@ export default function SubApp({ name }: SubAppProps) {
     />
   )
 }
+
+export default SubApp

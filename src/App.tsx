@@ -1,16 +1,16 @@
-import { useMemo } from 'react'
-import { RouterProvider } from 'react-router-dom'
-import { ConfigProvider, Spin, theme as antdTheme } from 'antd'
-import zhCN from 'antd/locale/zh_CN'
-import enUS from 'antd/locale/en_US'
-import { useAppStore } from '@/store/appStore'
-import { useUserStore } from '@/store/userStore'
 import { useInitApp } from '@/hooks/useInitApp'
 import { createAppRouter } from '@/router'
+import { useAppStore } from '@/store/appStore'
+import { useUserStore } from '@/store/userStore'
+import { ConfigProvider, Spin, theme as antdTheme } from 'antd'
+import enUS from 'antd/locale/en_US'
+import zhCN from 'antd/locale/zh_CN'
+import { useMemo } from 'react'
+import { RouterProvider } from 'react-router-dom'
 
 const localeMap = { zh: zhCN, en: enUS } as const
 
-function App() {
+const App = () => {
   const { theme, locale } = useAppStore()
   const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
   const { loading, authenticated } = useInitApp()

@@ -16,8 +16,7 @@ i18n
     defaultNS: 'common',
 
     backend: {
-      // 按语言和命名空间加载 JSON 文件
-      loadPath: '/src/i18n/locales/{{lng}}/{{ns}}.json',
+      loadPath: '/api/locales/{{lng}}/{{ns}}.json',
     },
 
     interpolation: {

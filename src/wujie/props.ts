@@ -1,7 +1,8 @@
-import { useMemo, useCallback } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useUserStore } from '@/store/userStore'
+import { API_BASE_URL } from '@/constants'
 import { useAppStore } from '@/store/appStore'
+import { useUserStore } from '@/store/userStore'
+import { useCallback, useMemo } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export interface SubAppPropsData {
   token: string | null
@@ -11,6 +12,7 @@ export interface SubAppPropsData {
   locale: string
   currentStation: string | null
   basePath: string
+  apiBaseUrl: string
   navigate: (path: string, options?: { state?: Record<string, unknown> }) => void
 }
 
@@ -36,8 +38,20 @@ export function useSubAppProps(): SubAppPropsData {
     [nav],
   )
 
+  const apiBaseUrl = window.location.origin + API_BASE_URL
+
   return useMemo(
-    () => ({ token, userInfo, permissions, theme, locale, currentStation, basePath, navigate }),
-    [token, userInfo, permissions, theme, locale, currentStation, basePath, navigate],
+    () => ({
+      token,
+      userInfo,
+      permissions,
+      theme,
+      locale,
+      currentStation,
+      basePath,
+      apiBaseUrl,
+      navigate,
+    }),
+    [token, userInfo, permissions, theme, locale, currentStation, basePath, apiBaseUrl, navigate],
   )
 }

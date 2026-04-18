@@ -26,14 +26,9 @@ export function getUserInfo() {
   return request.get<ApiResponse<import('@/store/userStore').UserInfo>>('/user/info')
 }
 
-/** 获取权限路由 + 子应用注册配置 */
+/** 获取权限路由（含子应用配置） */
 export function getUserRoutes() {
-  return request.get<
-    ApiResponse<{
-      routes: import('@/store/userStore').RouteItem[]
-      subApps: import('@/store/userStore').SubAppConfig[]
-    }>
-  >('/user/routes')
+  return request.get<ApiResponse<import('@/store/userStore').RouteItem[]>>('/user/routes')
 }
 
 /** 获取授权站点 */

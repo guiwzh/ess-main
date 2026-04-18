@@ -17,7 +17,8 @@ export interface UserInfo {
 
 export interface RouteItem {
   path: string
-  name: string
+  /** i18n 翻译 key（菜单翻译用） */
+  dictKey: string
   icon?: string
   component?: string
   children?: RouteItem[]
@@ -26,15 +27,15 @@ export interface RouteItem {
     hideInMenu?: boolean
     permissions?: string[]
   }
-}
-
-export interface SubAppConfig {
-  /** 子应用唯一名称 */
-  name: string
-  /** 子应用入口 URL（后端按环境返回） */
-  url: string
-  /** 是否使用 alive 模式（保活） */
-  alive: boolean
+  /** 子应用配置（后端返回，标识该路由由子应用渲染） */
+  subApp?: {
+    /** 子应用唯一名称 */
+    name: string
+    /** 子应用入口 URL（后端按环境返回） */
+    url: string
+    /** 是否使用 alive 模式（保活） */
+    alive?: boolean
+  }
 }
 
 interface UserState {
@@ -44,7 +45,6 @@ interface UserState {
   permissions: string[]
   dynamicRoutes: RouteItem[]
   authorizedStations: Station[]
-  subAppConfigs: SubAppConfig[]
 }
 
 interface UserActions {
@@ -53,7 +53,6 @@ interface UserActions {
   setPermissions: (permissions: string[]) => void
   setDynamicRoutes: (routes: RouteItem[]) => void
   setAuthorizedStations: (stations: Station[]) => void
-  setSubAppConfigs: (configs: SubAppConfig[]) => void
   logout: () => void
 }
 
@@ -64,7 +63,6 @@ const initialState: UserState = {
   permissions: [],
   dynamicRoutes: [],
   authorizedStations: [],
-  subAppConfigs: [],
 }
 
 export const useUserStore = create<UserState & UserActions>()((set) => ({
@@ -85,8 +83,6 @@ export const useUserStore = create<UserState & UserActions>()((set) => ({
   setDynamicRoutes: (routes) => set({ dynamicRoutes: routes }),
 
   setAuthorizedStations: (stations) => set({ authorizedStations: stations }),
-
-  setSubAppConfigs: (configs) => set({ subAppConfigs: configs }),
 
   logout: () => {
     clearTokens()

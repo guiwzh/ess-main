@@ -3,30 +3,27 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import WujieReact from 'wujie-react'
-import { getSubAppConfig } from './config'
 import { useSubAppProps } from './props'
 
 interface SubAppProps {
-  /** 子应用名称，必须与 config 中注册的 name 一致 */
+  /** 子应用唯一名称 */
   name: string
+  /** 子应用入口 URL */
+  url: string
+  /** 是否使用 alive 模式（保活） */
+  alive?: boolean
 }
 
-const SubApp = ({ name }: SubAppProps) => {
+const SubApp = ({ name, url, alive = false }: SubAppProps) => {
   const { t } = useTranslation('common')
   const [error, setError] = useState<string | null>(null)
-  const config = getSubAppConfig(name)
   const subAppProps = useSubAppProps()
   const location = useLocation()
 
   // 将完整路径拼到子应用 URL 上，子应用通过 basename 识别前缀
   const subUrl = useMemo(() => {
-    if (!config) return ''
-    return config.url + location.pathname + location.search
-  }, [config, location.pathname, location.search])
-
-  if (!config) {
-    return <Result status="error" title={t('subAppNotFound')} subTitle={`${name}`} />
-  }
+    return url + location.pathname + location.search
+  }, [url, location.pathname, location.search])
 
   if (error) {
     return (
@@ -45,9 +42,9 @@ const SubApp = ({ name }: SubAppProps) => {
 
   return (
     <WujieReact
-      name={config.name}
+      name={name}
       url={subUrl}
-      alive={config.alive}
+      alive={alive}
       props={subAppProps as unknown as Record<string, unknown>}
       loadError={() => setError(t('subAppLoadError', { name }))}
     />

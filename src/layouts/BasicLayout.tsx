@@ -1,12 +1,12 @@
-import { useMemo, useState, type ReactNode } from 'react'
-import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { ProLayout } from '@ant-design/pro-components'
-import { useTranslation } from 'react-i18next'
-import * as AntdIcons from '@ant-design/icons'
 import { useAppStore } from '@/store/appStore'
+import type { RouteItem } from '@/store/userStore'
 import { useUserStore } from '@/store/userStore'
 import { useBusSync } from '@/wujie/useBusSync'
-import type { RouteItem } from '@/store/userStore'
+import * as AntdIcons from '@ant-design/icons'
+import { ProLayout } from '@ant-design/pro-components'
+import { useMemo, useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import RightContent from './components/RightContent'
 
 /** 根据 icon 字符串动态解析 antd Icon 组件 */
@@ -30,7 +30,7 @@ function toProLayoutRoutes(
   return routes.map((r) => ({
     path: r.path,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    name: (t as any)(r.name),
+    name: (t as any)(r.dictKey),
     ...(r.icon ? { icon: resolveIcon(r.icon) } : {}),
     ...(r.children?.length ? { children: toProLayoutRoutes(r.children, t) } : {}),
   }))

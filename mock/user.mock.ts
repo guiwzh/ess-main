@@ -22,73 +22,63 @@ export default defineMock([
     body: {
       code: 0,
       message: 'ok',
-      data: {
-        routes: [
-          {
-            path: '/dashboard',
-            name: 'dashboard',
-            icon: 'DashboardOutlined',
-            component: 'pages/Dashboard',
-            meta: { title: '仪表盘' },
-          },
-          {
-            path: '/operation',
-            name: 'operation',
-            icon: 'ToolOutlined',
-            meta: { title: '运维管理' },
-            children: [
-              {
-                path: '/operation/devices',
-                name: 'device',
-                component: 'sub-operation',
-                meta: { title: '设备管理' },
-              },
-              {
-                path: '/operation/alarms',
-                name: 'alarm',
-                component: 'sub-operation',
-                meta: { title: '告警管理' },
-              },
-              {
-                path: '/operation/work-orders',
-                name: 'workOrder',
-                component: 'sub-operation',
-                meta: { title: '工单管理' },
-              },
-            ],
-          },
-          {
-            path: '/analysis',
-            name: 'analysis',
-            icon: 'BarChartOutlined',
-            meta: { title: '数据分析' },
-            children: [
-              {
-                path: '/analysis/energy-stats',
-                name: 'energyStats',
-                component: 'sub-analysis',
-                meta: { title: '能源统计' },
-              },
-              {
-                path: '/analysis/operation-analysis',
-                name: 'operationAnalysis',
-                component: 'sub-analysis',
-                meta: { title: '运营分析' },
-              },
-              {
-                path: '/analysis/report',
-                name: 'report',
-                component: 'sub-analysis',
-                meta: { title: '报表中心' },
-              },
-            ],
-          },
-        ],
-        subApps: [
-          { name: 'sub-operation', url: 'http://localhost:5175', alive: false },
-          { name: 'sub-analysis', url: 'http://localhost:5176', alive: false },
-        ],
-      },
+      data: [
+        {
+          path: '/dashboard',
+          dictKey: 'dashboard',
+          icon: 'DashboardOutlined',
+          component: 'pages/Dashboard',
+          meta: { title: '仪表盘' },
+        },
+        {
+          path: '/operation',
+          dictKey: 'operation',
+          icon: 'ToolOutlined',
+          subApp: { name: 'sub-operation', url: 'http://localhost:5175' },
+          meta: { title: '运维管理' },
+          children: [
+            {
+              path: '/operation/devices',
+              dictKey: 'device',
+              meta: { title: '设备管理' },
+            },
+            {
+              path: '/operation/alarms',
+              dictKey: 'alarm',
+              meta: { title: '告警管理' },
+            },
+            {
+              path: '/operation/work-orders',
+              dictKey: 'workOrder',
+              meta: { title: '工单管理' },
+            },
+          ],
+        },
+        {
+          path: '/analysis',
+          dictKey: 'analysis',
+          icon: 'BarChartOutlined',
+          subApp: { name: 'sub-analysis', url: 'http://localhost:5176' },
+          meta: { title: '数据分析' },
+          children: [
+            {
+              path: '/analysis/energy-stats',
+              dictKey: 'energyStats',
+              meta: { title: '能源统计' },
+            },
+            {
+              path: '/analysis/operation-analysis',
+              dictKey: 'operationAnalysis',
+              meta: { title: '运营分析' },
+            },
+            {
+              path: '/analysis/report',
+              dictKey: 'report',
+              meta: { title: '报表中心' },
+            },
+          ],
+        },
+      ],
     },
   },
   {

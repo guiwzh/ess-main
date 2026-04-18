@@ -11,9 +11,9 @@ import { RouterProvider } from 'react-router-dom'
 const localeMap = { zh: zhCN, en: enUS } as const
 
 const App = () => {
+  const { loading, authenticated } = useInitApp()
   const { theme, locale } = useAppStore()
   const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
-  const { loading, authenticated } = useInitApp()
   const router = useMemo(
     () => createAppRouter(authenticated, dynamicRoutes),
     [authenticated, dynamicRoutes],

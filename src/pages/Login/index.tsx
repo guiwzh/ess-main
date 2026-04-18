@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { Button, Form, Input, message } from 'antd'
-import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { useUserStore } from '@/store/userStore'
-import { login } from '@/services/auth'
 import type { LoginParams } from '@/services/auth'
+import { login } from '@/services/auth'
+import { useUserStore } from '@/store/userStore'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { Button, Form, Input, message } from 'antd'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import styles from './index.module.less'
 
 const LoginPage: React.FC = () => {

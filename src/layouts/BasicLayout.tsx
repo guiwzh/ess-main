@@ -1,3 +1,4 @@
+import ErrorBoundary from '@/components/ErrorBoundary'
 import { useAppStore } from '@/store/appStore'
 import type { RouteItem } from '@/store/userStore'
 import { useUserStore } from '@/store/userStore'
@@ -80,7 +81,9 @@ const BasicLayout: React.FC = () => {
       actionsRender={() => [<RightContent key="right" />]}
       contentStyle={{ padding: 18 }}
     >
-      <Outlet />
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
     </ProLayout>
   )
 }

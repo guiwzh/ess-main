@@ -25,6 +25,7 @@
   "logout": "Logout",
   "backHome": "Back to Home",
   "retry": "Retry",
+  "pageError": "Page Error",
   "subAppLoading": "Loading sub-app...",
   "subAppTimeout": "Sub-app {{name}} load timeout",
   "subAppLoadError": "Sub-app {{name}} load failed",

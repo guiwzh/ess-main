@@ -25,6 +25,7 @@
   "logout": "退出登录",
   "backHome": "返回首页",
   "retry": "重试",
+  "pageError": "页面出错了",
   "subAppLoading": "子应用加载中...",
   "subAppTimeout": "子应用 {{name}} 加载超时",
   "subAppLoadError": "子应用 {{name}} 加载失败",

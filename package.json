@@ -13,6 +13,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "vite preview",
+    "orval": "orval",
     "prepare": "husky"
   },
   "dependencies": {
@@ -47,6 +48,7 @@
     "husky": "^9.1.7",
     "less": "^4.6.4",
     "lint-staged": "^16.4.0",
+    "orval": "^8.8.0",
     "prettier": "^3.8.2",
     "prettier-plugin-organize-imports": "^4.3.0",
     "typescript": "~6.0.2",

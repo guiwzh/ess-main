@@ -10,12 +10,6 @@ export const STORAGE_KEYS = {
 /** API 基础地址 */
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string
 
-/** 子应用地址 */
-export const SUB_APP_URLS = {
-  OPERATION: import.meta.env.VITE_SUB_OPERATION_URL as string,
-  ANALYSIS: import.meta.env.VITE_SUB_ANALYSIS_URL as string,
-} as const
-
 /** Token 刷新相关 */
 export const TOKEN_CONFIG = {
   /** 最大重试次数 */

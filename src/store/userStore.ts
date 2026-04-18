@@ -1,6 +1,6 @@
-import { create } from 'zustand'
 import { STORAGE_KEYS } from '@/constants'
-import { setTokens, clearTokens } from '@/utils/auth'
+import { clearTokens, setTokens } from '@/utils/auth'
+import { create } from 'zustand'
 
 export interface Station {
   id: string
@@ -28,6 +28,15 @@ export interface RouteItem {
   }
 }
 
+export interface SubAppConfig {
+  /** 子应用唯一名称 */
+  name: string
+  /** 子应用入口 URL（后端按环境返回） */
+  url: string
+  /** 是否使用 alive 模式（保活） */
+  alive: boolean
+}
+
 interface UserState {
   token: string | null
   refreshToken: string | null
@@ -35,6 +44,7 @@ interface UserState {
   permissions: string[]
   dynamicRoutes: RouteItem[]
   authorizedStations: Station[]
+  subAppConfigs: SubAppConfig[]
 }
 
 interface UserActions {
@@ -43,6 +53,7 @@ interface UserActions {
   setPermissions: (permissions: string[]) => void
   setDynamicRoutes: (routes: RouteItem[]) => void
   setAuthorizedStations: (stations: Station[]) => void
+  setSubAppConfigs: (configs: SubAppConfig[]) => void
   logout: () => void
 }
 
@@ -53,6 +64,7 @@ const initialState: UserState = {
   permissions: [],
   dynamicRoutes: [],
   authorizedStations: [],
+  subAppConfigs: [],
 }
 
 export const useUserStore = create<UserState & UserActions>()((set) => ({
@@ -73,6 +85,8 @@ export const useUserStore = create<UserState & UserActions>()((set) => ({
   setDynamicRoutes: (routes) => set({ dynamicRoutes: routes }),
 
   setAuthorizedStations: (stations) => set({ authorizedStations: stations }),
+
+  setSubAppConfigs: (configs) => set({ subAppConfigs: configs }),
 
   logout: () => {
     clearTokens()

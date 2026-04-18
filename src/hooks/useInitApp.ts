@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
-import { useUserStore } from '@/store/userStore'
 import { getUserInfo, getUserRoutes, getUserStations } from '@/services/auth'
+import { useUserStore } from '@/store/userStore'
+import { useEffect, useState } from 'react'
 
 /** 应用初始化：认证检查 + 加载用户数据/路由/站点 */
 export function useInitApp() {
@@ -9,6 +9,7 @@ export function useInitApp() {
   const setPermissions = useUserStore((s) => s.setPermissions)
   const setDynamicRoutes = useUserStore((s) => s.setDynamicRoutes)
   const setAuthorizedStations = useUserStore((s) => s.setAuthorizedStations)
+  const setSubAppConfigs = useUserStore((s) => s.setSubAppConfigs)
   const [loading, setLoading] = useState(!!token)
 
   useEffect(() => {
@@ -30,7 +31,8 @@ export function useInitApp() {
           setPermissions(infoRes.data.data.roles)
         }
         if (routesRes.data.code === 0) {
-          setDynamicRoutes(routesRes.data.data)
+          setDynamicRoutes(routesRes.data.data.routes)
+          setSubAppConfigs(routesRes.data.data.subApps)
         }
         if (stationsRes.data.code === 0) {
           setAuthorizedStations(stationsRes.data.data)
@@ -46,7 +48,14 @@ export function useInitApp() {
     return () => {
       cancelled = true
     }
-  }, [token, setUserInfo, setPermissions, setDynamicRoutes, setAuthorizedStations])
+  }, [
+    token,
+    setUserInfo,
+    setPermissions,
+    setDynamicRoutes,
+    setAuthorizedStations,
+    setSubAppConfigs,
+  ])
 
   return { loading, authenticated: !!token }
 }

@@ -10,6 +10,4 @@ export const BUS_EVENTS = {
   TOKEN_REFRESH: 'token-refresh',
   /** Token 过期（子应用通知主应用） */
   TOKEN_EXPIRED: 'token-expired',
-  /** 路由跳转（子应用通知主应用） */
-  NAVIGATE: 'navigate',
 } as const

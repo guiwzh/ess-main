@@ -1,11 +1,11 @@
-import { Space, Dropdown } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-import { useUserStore } from '@/store/userStore'
-import ThemeSwitch from '@/components/ThemeSwitch'
 import LangSwitch from '@/components/LangSwitch'
 import StationPicker from '@/components/StationPicker'
+import ThemeSwitch from '@/components/ThemeSwitch'
+import { useUserStore } from '@/store/userStore'
+import { UserOutlined } from '@ant-design/icons'
+import { Dropdown, Skeleton, Space } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 const RightContent: React.FC = () => {
   const { t } = useTranslation('common')
@@ -23,19 +23,23 @@ const RightContent: React.FC = () => {
       <ThemeSwitch />
       <LangSwitch />
 
-      <Dropdown
-        menu={{
-          items: [{ key: 'logout', label: t('logout'), danger: true }],
-          onClick: ({ key }) => {
-            if (key === 'logout') handleLogout()
-          },
-        }}
-      >
-        <Space style={{ cursor: 'pointer' }}>
-          <UserOutlined />
-          <span>{userInfo?.realName || userInfo?.username || '-'}</span>
-        </Space>
-      </Dropdown>
+      {userInfo ? (
+        <Dropdown
+          menu={{
+            items: [{ key: 'logout', label: t('logout'), danger: true }],
+            onClick: ({ key }) => {
+              if (key === 'logout') handleLogout()
+            },
+          }}
+        >
+          <Space style={{ cursor: 'pointer' }}>
+            <UserOutlined />
+            <span>{userInfo.realName || userInfo.username}</span>
+          </Space>
+        </Dropdown>
+      ) : (
+        <Skeleton.Input active size="small" style={{ width: 80 }} />
+      )}
     </Space>
   )
 }

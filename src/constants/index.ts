@@ -8,7 +8,14 @@ export const STORAGE_KEYS = {
 } as const
 
 /** API 基础地址 */
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string
+export const API_BASE_URL: string = (() => {
+  const url = import.meta.env.VITE_API_BASE_URL
+  if (!url || typeof url !== 'string') {
+    console.error('[ESS] 环境变量 VITE_API_BASE_URL 未配置，回退到 /api')
+    return '/api'
+  }
+  return url
+})()
 
 /** Token 刷新相关 */
 export const TOKEN_CONFIG = {

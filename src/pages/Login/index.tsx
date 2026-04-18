@@ -27,7 +27,7 @@ const LoginPage: React.FC = () => {
         message.error(res.message || t('loginFailed'))
       }
     } catch {
-      message.error(t('loginFailed'))
+      message.error(navigator.onLine ? t('loginFailed') : t('networkError'))
     } finally {
       setLoading(false)
     }

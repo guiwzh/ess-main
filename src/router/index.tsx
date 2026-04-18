@@ -21,10 +21,10 @@ export function createAppRouter(authenticated: boolean, dynamicRoutes: RouteItem
 
   const childRoutes = generateRoutes(dynamicRoutes)
   const firstPath = dynamicRoutes[0]?.path || '/dashboard'
-  if (dynamicRoutes.length) {
+  if (childRoutes.length) {
     childRoutes.unshift({ index: true, element: <Navigate to={firstPath} replace /> })
-    childRoutes.push({ path: '*', element: <Forbidden /> })
   }
+  childRoutes.push({ path: '*', element: <Forbidden /> })
 
   return createBrowserRouter([
     {

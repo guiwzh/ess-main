@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/constants'
 import { useAppStore } from '@/store/appStore'
 import { useUserStore } from '@/store/userStore'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 export interface SubAppPropsData {
@@ -27,6 +27,10 @@ export function useSubAppProps(): SubAppPropsData {
 
   const location = useLocation()
   const nav = useNavigate()
+  const navRef = useRef(nav)
+  useEffect(() => {
+    navRef.current = nav
+  }, [nav])
 
   const basePath = useMemo(() => {
     const segments = location.pathname.split('/').filter(Boolean)
@@ -34,8 +38,8 @@ export function useSubAppProps(): SubAppPropsData {
   }, [location.pathname])
 
   const navigate = useCallback(
-    (path: string, options?: { state?: Record<string, unknown> }) => nav(path, options),
-    [nav],
+    (path: string, options?: { state?: Record<string, unknown> }) => navRef.current(path, options),
+    [],
   )
 
   const apiBaseUrl = window.location.origin + API_BASE_URL

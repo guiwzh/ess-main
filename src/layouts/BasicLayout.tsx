@@ -3,37 +3,39 @@ import type { RouteItem } from '@/store/userStore'
 import { useUserStore } from '@/store/userStore'
 import { useBusSync } from '@/wujie/useBusSync'
 import * as AntdIcons from '@ant-design/icons'
+import { AppstoreOutlined } from '@ant-design/icons'
 import { ProLayout } from '@ant-design/pro-components'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import RightContent from './components/RightContent'
 
-/** 根据 icon 字符串动态解析 antd Icon 组件 */
+const iconMap = AntdIcons as unknown as Record<string, React.ComponentType>
+
+/** 根据 icon 字符串动态解析 antd Icon 组件，未找到时回退默认图标 */
 function resolveIcon(iconName?: string): ReactNode | undefined {
   if (!iconName) return undefined
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const IconComp = (AntdIcons as any)[iconName]
-  return IconComp ? <IconComp /> : undefined
+  const IconComp = iconMap[iconName]
+  return IconComp ? <IconComp /> : <AppstoreOutlined />
 }
 
-/** 将后端路由数据转为 ProLayout route 格式，使用 i18n 翻译菜单名 */
-function toProLayoutRoutes(
-  routes: RouteItem[],
-  t: (key: string) => string,
-): {
+interface ProLayoutRoute {
   path: string
   name: string
   icon?: ReactNode
-  children?: ReturnType<typeof toProLayoutRoutes>
-}[] {
-  return routes.map((r) => ({
-    path: r.path,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    name: (t as any)(r.dictKey),
-    ...(r.icon ? { icon: resolveIcon(r.icon) } : {}),
-    ...(r.children?.length ? { children: toProLayoutRoutes(r.children, t) } : {}),
-  }))
+  children?: ProLayoutRoute[]
+}
+
+/** 将后端路由数据转为 ProLayout route 格式，过滤 hideInMenu，使用 i18n 翻译菜单名 */
+function toProLayoutRoutes(routes: RouteItem[], t: (key: string) => string): ProLayoutRoute[] {
+  return routes
+    .filter((r) => !r.meta?.hideInMenu)
+    .map((r) => ({
+      path: r.path,
+      name: t(r.dictKey),
+      ...(r.icon ? { icon: resolveIcon(r.icon) } : {}),
+      ...(r.children?.length ? { children: toProLayoutRoutes(r.children, t) } : {}),
+    }))
 }
 
 const BasicLayout: React.FC = () => {
@@ -49,8 +51,7 @@ const BasicLayout: React.FC = () => {
   useBusSync()
 
   const menuRoutes = useMemo(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    () => toProLayoutRoutes(dynamicRoutes, tMenu as any),
+    () => toProLayoutRoutes(dynamicRoutes, tMenu as (key: string) => string),
     [dynamicRoutes, tMenu],
   )
 

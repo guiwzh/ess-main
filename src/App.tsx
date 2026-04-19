@@ -30,6 +30,8 @@ const App = () => {
           token: {
             colorPrimary: '#00B96B',
             borderRadius: 6,
+            fontFamily:
+              "AlibabaPuHuiTi, 'AlibabaPuHuiTi Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
           },
         }}
       >

@@ -4,18 +4,38 @@
 
 // 自定义字体声明
 @font-face {
-  font-family: 'CustomFont';
-  src:
-    url('../assets/fonts/CustomFont.woff2') format('woff2'),
-    url('../assets/fonts/CustomFont.woff') format('woff');
-  font-weight: normal;
+  font-family: AlibabaPuHuiTi;
+  src: url('/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2');
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
+// 回退字体度量匹配 — 减少字体切换时的布局偏移 (CLS)
+// macOS 回退: PingFang SC
+@font-face {
+  font-family: 'AlibabaPuHuiTi Fallback';
+  src: local('PingFang SC');
+  ascent-override: 106%;
+  descent-override: 34%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
+// Windows 回退: Microsoft YaHei
+@font-face {
+  font-family: 'AlibabaPuHuiTi Fallback';
+  src: local('Microsoft YaHei');
+  ascent-override: 106%;
+  descent-override: 34%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
 // 全局基础样式
 body {
-  font-family: @font-family;
+  // font-family: @font-family;
+  font-weight: 500;
   font-size: @font-size-base;
   color: @text-color;
   background: @bg-layout;

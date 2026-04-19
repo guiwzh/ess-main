@@ -12,20 +12,9 @@
 }
 
 // 回退字体度量匹配 — 减少字体切换时的布局偏移 (CLS)
-// macOS 回退: PingFang SC
 @font-face {
   font-family: 'AlibabaPuHuiTi Fallback';
-  src: local('PingFang SC');
-  ascent-override: 106%;
-  descent-override: 34%;
-  line-gap-override: 0%;
-  size-adjust: 100%;
-}
-
-// Windows 回退: Microsoft YaHei
-@font-face {
-  font-family: 'AlibabaPuHuiTi Fallback';
-  src: local('Microsoft YaHei');
+  src: local('PingFang SC'), local('Microsoft YaHei');
   ascent-override: 106%;
   descent-override: 34%;
   line-gap-override: 0%;

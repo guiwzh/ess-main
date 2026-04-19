@@ -1,5 +1,5 @@
-import type { LoginParams } from '@/services/auth'
-import { login } from '@/services/auth'
+import type { LoginParams } from '@/services'
+import { login } from '@/services'
 import { useUserStore } from '@/store/userStore'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
@@ -18,7 +18,7 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (values: LoginParams) => {
     setLoading(true)
     try {
-      const { data: res } = await login(values)
+      const res = await login(values)
       if (res.code === 0) {
         setAuth(res.data.accessToken, res.data.refreshToken)
         message.success(t('loginSuccess'))

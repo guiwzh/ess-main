@@ -1,42 +1,9 @@
 import { STORAGE_KEYS } from '@/constants'
+import type { RouteItem, Station, UserInfo } from '@/services/generated/essApi'
 import { clearTokens, setTokens } from '@/utils/auth'
 import { create } from 'zustand'
 
-export interface Station {
-  id: string
-  name: string
-}
-
-export interface UserInfo {
-  id: string
-  username: string
-  realName: string
-  avatar?: string
-  roles: string[]
-}
-
-export interface RouteItem {
-  path: string
-  /** i18n 翻译 key（菜单翻译用） */
-  dictKey: string
-  icon?: string
-  component?: string
-  children?: RouteItem[]
-  meta?: {
-    title: string
-    hideInMenu?: boolean
-    permissions?: string[]
-  }
-  /** 子应用配置（后端返回，标识该路由由子应用渲染） */
-  subApp?: {
-    /** 子应用唯一名称 */
-    name: string
-    /** 子应用入口 URL（后端按环境返回） */
-    url: string
-    /** 是否使用 alive 模式（保活） */
-    alive?: boolean
-  }
-}
+export type { RouteItem, Station, UserInfo }
 
 interface UserState {
   token: string | null

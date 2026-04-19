@@ -1,4 +1,4 @@
-import { getUserInfo, getUserRoutes, getUserStations } from '@/services/auth'
+import { getUserInfo, getUserRoutes, getUserStations } from '@/services'
 import { useUserStore } from '@/store/userStore'
 import { useEffect, useState } from 'react'
 
@@ -25,15 +25,15 @@ export function useInitApp() {
         ])
         if (cancelled) return
 
-        if (infoRes.data.code === 0) {
-          setUserInfo(infoRes.data.data)
-          setPermissions(infoRes.data.data.roles)
+        if (infoRes.code === 0) {
+          setUserInfo(infoRes.data)
+          setPermissions(infoRes.data.roles)
         }
-        if (routesRes.data.code === 0) {
-          setDynamicRoutes(routesRes.data.data)
+        if (routesRes.code === 0) {
+          setDynamicRoutes(routesRes.data)
         }
-        if (stationsRes.data.code === 0) {
-          setAuthorizedStations(stationsRes.data.data)
+        if (stationsRes.code === 0) {
+          setAuthorizedStations(stationsRes.data)
         }
       } catch {
         // token 无效等异常由 axios 拦截器处理

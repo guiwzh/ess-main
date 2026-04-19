@@ -186,7 +186,7 @@
       },
       "UserInfo": {
         "type": "object",
-        "required": ["id", "username", "realName", "roles"],
+        "required": ["id", "username", "realName", "roles", "permissions"],
         "properties": {
           "id": {
             "type": "string"
@@ -201,6 +201,12 @@
             "type": "string"
           },
           "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "permissions": {
             "type": "array",
             "items": {
               "type": "string"

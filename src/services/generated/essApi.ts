@@ -26,6 +26,7 @@ export interface UserInfo {
   realName: string
   avatar?: string
   roles: string[]
+  permissions: string[]
 }
 
 export interface SubAppConfig {

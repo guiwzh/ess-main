@@ -27,7 +27,7 @@ export function useInitApp() {
 
         if (infoRes.code === 0) {
           setUserInfo(infoRes.data)
-          setPermissions(infoRes.data.roles)
+          setPermissions(infoRes.data.permissions)
         }
         if (routesRes.code === 0) {
           setDynamicRoutes(routesRes.data)

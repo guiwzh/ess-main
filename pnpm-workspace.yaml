@@ -1,0 +1,5 @@
+allowBuilds:
+  cn-font-split: false
+  esbuild: false
+  koffi: false
+  protobufjs: false

@@ -8,6 +8,8 @@ import enUS from 'antd/locale/en_US'
 import zhCN from 'antd/locale/zh_CN'
 import { useMemo } from 'react'
 import { RouterProvider } from 'react-router-dom'
+// vite-plugin-font: 全量分片，浏览器按 unicode-range 按需加载
+import { css, fontFamilyFallback } from '../public/fonts/AlibabaPuHuiTi-3-65-Medium.ttf'
 
 const localeMap = { zh: zhCN, en: enUS } as const
 
@@ -30,8 +32,7 @@ const App = () => {
           token: {
             colorPrimary: '#00B96B',
             borderRadius: 6,
-            fontFamily:
-              "AlibabaPuHuiTi, 'AlibabaPuHuiTi Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+            fontFamily: `"${css.family}", ${fontFamilyFallback}`,
           },
         }}
       >

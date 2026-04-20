@@ -2,24 +2,7 @@
 @import './mixins.less';
 @import './reset.less';
 
-// 自定义字体声明
-@font-face {
-  font-family: AlibabaPuHuiTi;
-  src: url('/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2');
-  // font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-// 回退字体度量匹配 — 减少字体切换时的布局偏移 (CLS)
-@font-face {
-  font-family: 'AlibabaPuHuiTi Fallback';
-  src: local('PingFang SC'), local('Microsoft YaHei');
-  ascent-override: 106%;
-  descent-override: 34%;
-  line-gap-override: 0%;
-  size-adjust: 100%;
-}
+// 字体由 vite-plugin-font 自动分割和注入，无需手动 @font-face 声明
 
 // 全局基础样式
 body {

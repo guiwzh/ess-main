@@ -3,6 +3,7 @@ import { useAppStore } from '@/store/appStore'
 import { useUserStore } from '@/store/userStore'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { css, fontFamilyFallback } from '../../public/fonts/AlibabaPuHuiTi-3-65-Medium.woff2'
 
 export interface SubAppPropsData {
   token: string | null
@@ -13,6 +14,7 @@ export interface SubAppPropsData {
   currentStation: string | null
   basePath: string
   apiBaseUrl: string
+  fontFamily: string
   navigate: (path: string, options?: { state?: Record<string, unknown> }) => void
 }
 
@@ -54,6 +56,7 @@ export function useSubAppProps(): SubAppPropsData {
       currentStation,
       basePath,
       apiBaseUrl,
+      fontFamily: `"${css.family}", ${fontFamilyFallback}`,
       navigate,
     }),
     [token, userInfo, permissions, theme, locale, currentStation, basePath, apiBaseUrl, navigate],

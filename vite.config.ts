@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
-import { defineConfig } from 'vite'
+import { defineConfig, esmExternalRequirePlugin } from 'vite'
+import compression from 'vite-plugin-compression2'
 import Font from 'vite-plugin-font'
 import { mockDevServerPlugin } from 'vite-plugin-mock-dev-server'
 
@@ -10,6 +11,7 @@ export default defineConfig(() => {
     plugins: [
       react(),
       mockDevServerPlugin({ prefix: '^/api' }),
+      compression({ algorithms: ['gzip', 'brotliCompress'] }),
       Font.vite({
         include: [/\.otf/, /\.ttf/, /\.woff2/],
         // 注意：不使用 scanFiles/?subsets 模式
@@ -27,6 +29,39 @@ export default defineConfig(() => {
       preprocessorOptions: {
         less: {
           javascriptEnabled: true,
+        },
+      },
+    },
+    build: {
+      rolldownOptions: {
+        plugins: [
+          esmExternalRequirePlugin({
+            external: [
+              'react',
+              /^react\//,
+              'react-dom',
+              /^react-dom\//,
+              'react-router-dom',
+              /^react-router-dom\//,
+              'react-router',
+              /^react-router\//,
+              'axios',
+            ],
+          }),
+        ],
+        output: {
+          codeSplitting: {
+            groups: [
+              {
+                name: 'vendor-antd',
+                test: /node_modules[\\/](antd|@ant-design[\\/](?!pro)|rc-|@rc-component)/,
+                priority: 16,
+              },
+              { name: 'vendor-pro', test: /node_modules[\\/]@ant-design[\\/]pro-/, priority: 15 },
+              { name: 'vendor-utils', test: /node_modules[\\/](zustand|i18next)/, priority: 10 },
+              { name: 'vendor', test: /node_modules/, priority: 1 },
+            ],
+          },
         },
       },
     },

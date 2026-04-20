@@ -1,5 +1,6 @@
 import { getUserInfo, getUserRoutes, getUserStations } from '@/services'
 import { useUserStore } from '@/store/userStore'
+import { initWujiePreload } from '@/wujie/setup'
 import { useEffect, useState } from 'react'
 
 /** 应用初始化：认证检查 + 加载用户数据/路由/站点 */
@@ -31,6 +32,7 @@ export function useInitApp() {
         }
         if (routesRes.code === 0) {
           setDynamicRoutes(routesRes.data)
+          initWujiePreload(routesRes.data)
         }
         if (stationsRes.code === 0) {
           setAuthorizedStations(stationsRes.data)

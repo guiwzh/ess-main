@@ -3,17 +3,27 @@ import WujieReact from 'wujie-react'
 
 const { setupApp, preloadApp } = WujieReact
 
-/** 从动态路由中提取去重的子应用配置 */
+/** 从动态路由中提取去重的子应用配置；检测到同名但配置不一致时打印警告 */
 function extractSubApps(routes: RouteItem[]) {
   const map = new Map<string, { name: string; url: string; alive: boolean }>()
   function walk(items: RouteItem[]) {
     for (const r of items) {
-      if (r.subApp && !map.has(r.subApp.name)) {
-        map.set(r.subApp.name, {
+      if (r.subApp) {
+        const next = {
           name: r.subApp.name,
           url: r.subApp.url,
           alive: r.subApp.alive ?? false,
-        })
+        }
+        const existing = map.get(next.name)
+        if (!existing) {
+          map.set(next.name, next)
+        } else if (existing.url !== next.url || existing.alive !== next.alive) {
+          console.warn(
+            `[wujie] subApp "${next.name}" has conflicting config: ` +
+              `kept { url=${existing.url}, alive=${existing.alive} }, ` +
+              `discarded { url=${next.url}, alive=${next.alive} }`,
+          )
+        }
       }
       if (r.children?.length) walk(r.children)
     }
@@ -39,11 +49,16 @@ export function initWujiePreload(routes: RouteItem[]) {
     })
   }
 
+  const preloadAll = () => {
+    for (const app of subApps) {
+      preloadApp({ name: app.name, url: app.url })
+    }
+  }
+
+  // 优先用 requestIdleCallback；Safari < 16.4 等无此 API 的环境回退到 setTimeout
   if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      for (const app of subApps) {
-        preloadApp({ name: app.name, url: app.url })
-      }
-    })
+    requestIdleCallback(preloadAll, { timeout: 3000 })
+  } else {
+    setTimeout(preloadAll, 2000)
   }
 }

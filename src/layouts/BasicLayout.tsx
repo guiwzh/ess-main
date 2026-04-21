@@ -44,7 +44,8 @@ const BasicLayout: React.FC = () => {
   const location = useLocation()
   const { t } = useTranslation('common')
   const { t: tMenu } = useTranslation('menu')
-  const { sidebarCollapsed, setSidebarCollapsed } = useAppStore()
+  const sidebarCollapsed = useAppStore((s) => s.sidebarCollapsed)
+  const setSidebarCollapsed = useAppStore((s) => s.setSidebarCollapsed)
   const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
   const [openKeys, setOpenKeys] = useState<string[]>([])
 

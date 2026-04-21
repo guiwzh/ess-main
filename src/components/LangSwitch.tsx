@@ -1,12 +1,13 @@
-import { Select } from 'antd'
-import { GlobalOutlined } from '@ant-design/icons'
-import { useTranslation } from 'react-i18next'
-import { useAppStore } from '@/store/appStore'
 import type { Locale } from '@/store/appStore'
+import { useAppStore } from '@/store/appStore'
+import { GlobalOutlined } from '@ant-design/icons'
+import { Select } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 const LangSwitch: React.FC = () => {
   const { i18n } = useTranslation()
-  const { locale, setLocale } = useAppStore()
+  const locale = useAppStore((s) => s.locale)
+  const setLocale = useAppStore((s) => s.setLocale)
 
   const handleChange = (value: Locale) => {
     setLocale(value)

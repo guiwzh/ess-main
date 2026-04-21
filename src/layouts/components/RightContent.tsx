@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom'
 const RightContent: React.FC = () => {
   const { t } = useTranslation('common')
   const navigate = useNavigate()
-  const { userInfo, logout } = useUserStore()
+  const userInfo = useUserStore((s) => s.userInfo)
+  const logout = useUserStore((s) => s.logout)
 
   const handleLogout = () => {
     logout()

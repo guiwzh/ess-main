@@ -5,7 +5,8 @@ import { Select } from 'antd'
 import { useEffect } from 'react'
 
 const StationPicker: React.FC = () => {
-  const { currentStation, setCurrentStation } = useAppStore()
+  const currentStation = useAppStore((s) => s.currentStation)
+  const setCurrentStation = useAppStore((s) => s.setCurrentStation)
   const authorizedStations = useUserStore((s) => s.authorizedStations)
 
   // 站点列表加载后，若尚未选择站点则自动选中第一个

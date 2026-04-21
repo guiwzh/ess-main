@@ -6,16 +6,30 @@ import { useUserStore } from '@/store/userStore'
 import { ConfigProvider, Spin, theme as antdTheme } from 'antd'
 import enUS from 'antd/locale/en_US'
 import zhCN from 'antd/locale/zh_CN'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { RouterProvider } from 'react-router-dom'
 // vite-plugin-font: 全量分片，浏览器按 unicode-range 按需加载
 import { css, fontFamilyFallback } from '../public/fonts/AlibabaPuHuiTi-3-65-Medium.ttf'
 
 const localeMap = { zh: zhCN, en: enUS } as const
 
+const CenteredSpin = () => (
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+    }}
+  >
+    <Spin size="large" />
+  </div>
+)
+
 const App = () => {
   const { loading, authenticated } = useInitApp()
-  const { theme, locale } = useAppStore()
+  const theme = useAppStore((s) => s.theme)
+  const locale = useAppStore((s) => s.locale)
   const dynamicRoutes = useUserStore((s) => s.dynamicRoutes)
   const router = useMemo(
     () => createAppRouter(authenticated, dynamicRoutes),
@@ -36,20 +50,9 @@ const App = () => {
           },
         }}
       >
-        {authenticated && loading ? (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100vh',
-            }}
-          >
-            <Spin size="large" />
-          </div>
-        ) : (
-          <RouterProvider router={router} />
-        )}
+        <Suspense fallback={<CenteredSpin />}>
+          {authenticated && loading ? <CenteredSpin /> : <RouterProvider router={router} />}
+        </Suspense>
       </ConfigProvider>
     </ErrorBoundary>
   )

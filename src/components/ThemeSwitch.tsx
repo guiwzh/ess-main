@@ -1,9 +1,10 @@
-import { Switch } from 'antd'
-import { BulbOutlined } from '@ant-design/icons'
 import { useAppStore } from '@/store/appStore'
+import { BulbOutlined } from '@ant-design/icons'
+import { Switch } from 'antd'
 
 const ThemeSwitch: React.FC = () => {
-  const { theme, toggleTheme } = useAppStore()
+  const theme = useAppStore((s) => s.theme)
+  const toggleTheme = useAppStore((s) => s.toggleTheme)
 
   return (
     <Switch

@@ -5,17 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>储能运维管理平台</title>
-    <!-- CDN External: 浏览器 HTTP 缓存共享，只下载一次。如需替换为自建 CDN，修改下方 URL 即可 -->
+    <!-- 本地 vendor：消除对外部 CDN 的运行时依赖，内容由 scripts/build-vendor.mjs 生成 -->
     <script type="importmap">
     {
       "imports": {
-        "react": "https://esm.sh/react@19.2.5",
-        "react/": "https://esm.sh/react@19.2.5/",
-        "react-dom": "https://esm.sh/react-dom@19.2.5?external=react",
-        "react-dom/client": "https://esm.sh/react-dom@19.2.5/client?external=react",
-        "react-router-dom": "https://esm.sh/react-router-dom@7.14.0?external=react,react-dom",
-        "react-router": "https://esm.sh/react-router@7.14.0?external=react",
-        "axios": "https://esm.sh/axios@1.15.0"
+        "react": "/vendor/react.js",
+        "react/jsx-runtime": "/vendor/react/jsx-runtime.js",
+        "react/jsx-dev-runtime": "/vendor/react/jsx-dev-runtime.js",
+        "react-dom": "/vendor/react-dom.js",
+        "react-dom/client": "/vendor/react-dom/client.js",
+        "react-router-dom": "/vendor/react-router-dom.js",
+        "axios": "/vendor/axios.js"
       }
     }
     </script>

@@ -1,6 +1,6 @@
-import WujieReact from 'wujie-react'
 import { BUS_EVENTS } from '@/constants/bus-events'
-import type { Theme, Locale } from '@/store/appStore'
+import type { Locale, Theme } from '@/store/appStore'
+import WujieReact from 'wujie-react'
 
 const { bus } = WujieReact
 
@@ -22,6 +22,16 @@ export function emitStationChange(stationId: string | null) {
 /** 向子应用广播 Token 已刷新 */
 export function emitTokenRefresh(token: string) {
   bus.$emit(BUS_EVENTS.TOKEN_REFRESH, token)
+}
+
+/** 向子应用广播 Token 刷新失败（让子应用 pending 请求 reject，而不是永久挂起） */
+export function emitTokenRefreshFailed() {
+  bus.$emit(BUS_EVENTS.TOKEN_REFRESH_FAILED)
+}
+
+/** 通知子应用重新从 wujie props 拉取 userInfo/permissions */
+export function emitUserContextSync() {
+  bus.$emit(BUS_EVENTS.USER_CONTEXT_SYNC)
 }
 
 /** 监听子应用 token-expired 事件 */

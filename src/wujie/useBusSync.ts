@@ -1,7 +1,14 @@
 import { useAppStore } from '@/store/appStore'
+import { useUserStore } from '@/store/userStore'
 import { getNewToken } from '@/utils/request'
 import { useEffect, useRef } from 'react'
-import { emitLocaleChange, emitStationChange, emitThemeChange, onTokenExpired } from './bus'
+import {
+  emitLocaleChange,
+  emitStationChange,
+  emitThemeChange,
+  emitUserContextSync,
+  onTokenExpired,
+} from './bus'
 
 /**
  * 主应用 bus 同步 hook
@@ -12,6 +19,8 @@ export function useBusSync() {
   const theme = useAppStore((s) => s.theme)
   const locale = useAppStore((s) => s.locale)
   const currentStation = useAppStore((s) => s.currentStation)
+  const userInfo = useUserStore((s) => s.userInfo)
+  const permissions = useUserStore((s) => s.permissions)
   /**
    * 跳过首次渲染的 bus emit。
    * 原因：主应用 mount 时子应用尚未加载完成，bus 事件无人订阅会触发 wujie warn。
@@ -39,6 +48,11 @@ export function useBusSync() {
   useEffect(() => {
     if (mountedRef.current) emitStationChange(currentStation)
   }, [currentStation])
+
+  // userInfo / permissions 变更 → 通知子应用从 wujie props 拉新
+  useEffect(() => {
+    if (mountedRef.current) emitUserContextSync()
+  }, [userInfo, permissions])
 
   // 标记已挂载（必须在上面的 emit effects 之后声明，React 按声明顺序执行 effects）
   useEffect(() => {

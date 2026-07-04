@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
-import { defineConfig, esmExternalRequirePlugin } from 'vite'
+import { defineConfig } from 'vite'
 import compression from 'vite-plugin-compression2'
 import Font from 'vite-plugin-font'
 import { mockDevServerPlugin } from 'vite-plugin-mock-dev-server'
@@ -34,21 +34,6 @@ export default defineConfig(() => {
     },
     build: {
       rolldownOptions: {
-        plugins: [
-          esmExternalRequirePlugin({
-            external: [
-              'react',
-              /^react\//,
-              'react-dom',
-              /^react-dom\//,
-              'react-router-dom',
-              /^react-router-dom\//,
-              'react-router',
-              /^react-router\//,
-              'axios',
-            ],
-          }),
-        ],
         output: {
           codeSplitting: {
             groups: [
